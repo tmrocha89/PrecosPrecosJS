@@ -3,6 +3,17 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var Preco = mongoose.model('Preco');
 
+//middleware
+/*
+ duplicated!!
+ Fix this later
+*/
+router.use(function(req,res, next){
+  if( !req.isAuthenticated()){
+    return res.redirect('#/login');
+  }
+  return next();
+});
 
 router.route('/')
 

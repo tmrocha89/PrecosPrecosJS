@@ -3,6 +3,17 @@ var router = express.Router();
 var mongoose = require('mongoose');
 var Marca = mongoose.model('Marca');
 
+//middleware
+/*
+ duplicated!!
+ Fix this later
+*/
+router.use(function(req,res, next){
+  if( !req.isAuthenticated()){
+    return res.redirect('#/login');
+  }
+  return next();
+});
 
 router.route('/')
 

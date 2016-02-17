@@ -1,0 +1,24 @@
+<div ng-show="authenticated" >
+	<h4>Lojas</h4>
+	<a href="#/lojas/create">Criar nova Loja</a>
+	<table class="table">
+		<tr>
+			<th>ID</th>
+			<th>Nome</th>
+			<th>Local</th>
+			<th>Operações</th>
+		</tr>
+
+		<tr ng-repeat = "loja in lojas" ng-class-odd="'odd'" ng-class-even="'even'">
+		<!--<a class="btn btn-primary" ui-sref="editMovie({id:divisao._id})">Edit</a>-->
+			<td>{{loja.id}}</td>
+			<td>{{loja.nome}}</td>
+			<td>{{loja.local}}</td>
+			<td> <a href="#" ng-click="edit({id:loja._id})">Editar</a> |
+			     <a href="#" ng-click="delete({id:loja._id})">Eliminar</a>
+			</td>
+		</tr>
+
+		</table>
+</div>
+

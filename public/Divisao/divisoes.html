@@ -1,0 +1,22 @@
+<div ng-show="authenticated" >
+	<h4>Divisões</h4>
+	<a href="#/divisoes/create">Criar nova divisão</a>
+	<table class="table">
+		<tr>
+			<th>ID</th>
+			<th>Nome</th>
+			<th>Operações</th>
+		</tr>
+
+		<tr ng-repeat = "divisao in divisoes" ng-class-odd="'odd'" ng-class-even="'even'">
+		<!--<a class="btn btn-primary" ui-sref="editMovie({id:divisao._id})">Edit</a>-->
+			<td>{{divisao.id}}</td>
+			<td>{{divisao.nome}}</td>
+			<td> <a href="#" ng-click="edit({id:divisao._id})">Editar</a> |
+			     <a href="#" ng-click="delete({id:divisao._id})">Eliminar</a>
+			</td>
+		</tr>
+
+		</table>
+</div>
+

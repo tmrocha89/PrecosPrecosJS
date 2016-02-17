@@ -4,6 +4,10 @@ var mongoose = require('mongoose');
 var Divisao = mongoose.model('Divisao');
 
 //middleware
+/*
+ duplicated!!
+ Fix this later
+*/
 router.use(function(req,res, next){
   if( !req.isAuthenticated()){
     return res.redirect('#/login');

@@ -76,6 +76,18 @@ var registerProduct = function(body, callback){
     }
 }
 
+//middleware
+/*
+ duplicated!!
+ Fix this later
+*/
+router.use(function(req,res, next){
+  if( !req.isAuthenticated()){
+    return res.redirect('#/login');
+  }
+  return next();
+});
+
 router.route('/Produtos')
 
     //obter todas os Produtos
