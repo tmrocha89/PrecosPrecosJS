@@ -1,0 +1,18 @@
+<label for="divisao">Divisão</label>
+<select class="form-control" ng-model="produto.divisao" >
+	<option ng-repeat = "divisao in divisoes" value = "{{divisao._id}}" 
+	ng-selected ='divisao.nome == produto.divisao.nome' >
+	{{divisao.nome}}</option>
+
+</select>
+
+<label for="divisao">Nome do produto</label>
+<input required type="text" class="form-control" placeholder="Nome do produto" ng-model="produto.nome"/>
+
+<label for="divisao">Observações</label>
+<input required type="text" class="form-control" placeholder="Observações" ng-model="produto.obs"/> 
+
+<label for="divisao">Marca</label>
+<input required type="text" class="form-control" placeholder="Marca" ng-model="produto.marca"/> 
+
+<input class="btn submit-btn pull-right" type="submit" value="Guardar" />

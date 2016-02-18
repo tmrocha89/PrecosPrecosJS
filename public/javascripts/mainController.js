@@ -17,6 +17,25 @@ var app = angular.module('PrecosPrecos', ['ngRoute', 'ngResource']).run(function
 
 });
 
+var DIVISAO_INDEX = "";
+var DIVISAO_CREATE = "";
+var DIVISAO_EDIT = "";
+
+var LOJA_INDEX = "";
+var LOJA_CREATE = "";
+var LOJA_EDIT = "";
+
+var PRODUTO_INDEX = "";
+var PRODUTO_CREATE = "";
+var PRODUTO_EDIT = "";
+var PRODUTO_DETAIL = "";
+
+
+var _INDEX = "";
+var _CREATE = "";
+var _EDIT = "";
+var _DETAIL = "";
+
 app.config(function($routeProvider){
 	$routeProvider
 		.when('/', {
@@ -60,8 +79,18 @@ app.config(function($routeProvider){
 		})
 
 		.when('/produtos',{
-			templateUrl : 'divisao.html',
-			controller : 'appController'
+			templateUrl : 'Produto/produtos.html',
+			controller : 'produtoController'
+		})
+
+		.when('/produtos/create',{
+			templateUrl : 'Produto/createProduto.html',
+			controller : 'produtoController'
+		})
+
+		.when('/produtos/edit/:id',{
+			templateUrl : 'Produto/editarProduto.html',
+			controller : 'produtoController'
 		})
 
 		.when('/camas',{
@@ -117,10 +146,22 @@ app.factory('lojaService', function($resource){ //http
 			resource: $resource('/api/lojas/:id', {id : '@_id'}, {
 				'update': { method:'PUT' }
 			}),
-	        loja: loja}
-	        ;
+	        loja: loja
+	    	};
 });
 
+
+/* Service */
+app.factory('produtoService', function($resource){ //http
+	/*var factory = {};factory.getAll = function(){return $http.get('/api/divisoes');}return factory;*/
+	var produto = { nome: '', obs: '', divisao: {nome:''}, marca: '', precos: [], imagens:[] };
+	return {
+			resource: $resource('/api/produtos/:id', {id : '@_id'}, {
+				'update': { method:'PUT' }
+			}),
+	        produto: produto
+	    	};
+});
 
 app.controller('appController', function($scope){ });
 
@@ -131,6 +172,8 @@ app.controller('appController', function($scope){ });
 
 app.controller('divisaoController', function($scope, $location, divisaoService){
 	
+	if($location.$$path == "/produtos/create")
+		divisaoService.divisao = {nome: ''};
 
 	$scope.divisoes = divisaoService.resource.query();
 	$scope.divisao = divisaoService.divisao;
@@ -167,7 +210,7 @@ app.controller('divisaoController', function($scope, $location, divisaoService){
 				divisaoService.divisao = {nome: ''};
 				$location.path('/divisoes');
 			});
-	}
+	};
 
 });
 
@@ -178,6 +221,8 @@ app.controller('divisaoController', function($scope, $location, divisaoService){
 
 app.controller('lojaController', function($scope, $location, lojaService){
 	
+	if($location.$$path == "/lojas/create")
+		lojaService.loja = {nome: '', local: ''};
 
 	$scope.lojas = lojaService.resource.query();
 	$scope.loja = lojaService.loja;
@@ -211,14 +256,60 @@ app.controller('lojaController', function($scope, $location, lojaService){
 		console.log("updating...."+$scope.loja._id);
 		lojaService.resource.update({id:$scope.loja._id},$scope.loja,
 			function(){
-				lojaService.loja = {nome: ''};
+				lojaService.loja = {nome: '', local: ''};
 				$location.path('/lojas');
 			});
-	}
-
+	};
 });
 
+/*
+	Produtos
+*/
+app.controller('produtoController', function($scope, $location, produtoService, divisaoService){
+	
+	if($location.$$path == "/produtos/create")
+		produtoService.produto = { nome: '', obs: '', divisao: {nome:''} , marca: '', precos: [], imagens:[] };
 
+	$scope.produtos = produtoService.resource.query();
+	$scope.produto = produtoService.produto;
+	$scope.divisoes = divisaoService.resource.query();
+
+
+	console.log($scope.produtos);
+
+	$scope.post = function(){
+		console.log("a fazer um post de produto " + $scope.produto);
+		produtoService.resource.save($scope.produto, function(){ //alterei novaDivisao
+			$location.path('/produtos');
+		});
+	};
+
+	$scope.delete = function(prodObj){
+		produtoService.resource.delete({id: prodObj.id},function(produto){
+			$location.path('/produtos');
+		});
+	};
+
+	//este metodo é chamado pelo 'index'
+	$scope.edit = function(prodObj){
+		console.log('editing... /produtos/edit/'+prodObj.id);
+		produtoService.resource.get({id: prodObj.id},function(produto){
+			produtoService.produto = produto;
+			console.log("Produto: "+produto.nome+ "__"+produto._id);
+			$location.path('/produtos/edit/'+produto._id);
+		});
+	};
+
+	$scope.update = function(){
+		console.log("teste update");
+		console.log("updating...."+$scope.produto._id);
+		produtoService.resource.update({id:$scope.produto._id},$scope.produto,
+			function(){
+				produtoService.produto = { nome: '', obs: '', divisao: {nome:''} , marca: '', precos: [], imagens:[] };
+				$location.path('/produtos');
+			}, function(err){console.log(err);});
+	};
+});
 										/*         dependencias              */
 app.controller('authController', function($scope, $rootScope, $http, $location){
 //$http -> Returns a promise with success and error callbacks

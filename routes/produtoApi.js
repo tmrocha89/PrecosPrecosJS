@@ -64,6 +64,8 @@ global.buildMaqLavarRoupa = function(body, maqLavarRoupa){
 };
 
 var registerProduct = function(body, callback){
+  if(body.kind === undefined)
+    body.kind = 'Produto';
   var objProd = constructors[body.kind].constructor;
   if(objProd){
     if(typeof objProd === "object"){
@@ -93,11 +95,12 @@ router.route('/Produtos')
     //obter todas os Produtos
     .get(function(req, res){
       Produto.find({})
-        .populate('marca')
+        .populate('divisao')
         .populate('precos')
         .populate('imagens')
         .exec(function(err,produtos){
             if(err){
+              console.log("erro:: "+err);
                return res.send(500, err);
             }
             return res.send(produtos);
@@ -109,7 +112,7 @@ router.route('/Aspiradores')
     //obter todas os Produtos
     .get(function(req, res){
       Aspirador.find({})
-        .populate('marca')
+        .populate('divisao')
         .populate('precos')
         .populate('imagens')
         .exec(function(err,produtos){
@@ -125,7 +128,7 @@ router.route('/Camas')
     //obter todas os Produtos
     .get(function(req, res){
       Cama.find({})
-        .populate('marca')
+        .populate('divisao')
         .populate('precos')
         .populate('imagens')
         .exec(function(err,produtos){
@@ -141,7 +144,7 @@ router.route('/Colchoes')
     //obter todas os Produtos
     .get(function(req, res){
       Colchao.find({})
-        .populate('marca')
+        .populate('divisao')
         .populate('precos')
         .populate('imagens')
         .exec(function(err,produtos){
@@ -157,7 +160,7 @@ router.route('/Figorificos')
     //obter todas os Produtos
     .get(function(req, res){
       Figorifico.find({})
-        .populate('marca')
+        .populate('divisao')
         .populate('precos')
         .populate('imagens')
         .exec(function(err,produtos){
@@ -173,7 +176,7 @@ router.route('/MaqsLavarRoupa')
     //obter todas os Produtos
     .get(function(req, res){
       MaqLavarRoupa.find({})
-        .populate('marca')
+        .populate('divisao')
         .populate('precos')
         .populate('imagens')
         .exec(function(err,produtos){
@@ -190,7 +193,6 @@ router.route('/:type(Produtos|Aspiradores|Camas|Colchoes|Figorificos|MaqsLavarRo
     //obter todas os Produtos
     .get(function(req, res){
       Produto.find({})
-        .populate('marca')
         .populate('precos')
         .populate('imagens')
         .exec(function(err,produtos){
@@ -202,13 +204,18 @@ router.route('/:type(Produtos|Aspiradores|Camas|Colchoes|Figorificos|MaqsLavarRo
     })
 */
     //criar uma nova Produto
-    .post(function(req, res){
+    .post(function(req, res){ 
         registerProduct(req.body, function(err,objProd){
-          if(err){
+          /*if(err){
             return res.send(err);
           }
           console.log("guardado "+objProd);
-          return res.send(objProd);
+          return res.send(objProd);*/
+          /*
+                      FIX THIS !!!!!!!!
+                      PROBLEMS WHEN I TRY SAVE A OBJECT WITHOUT 'divisao'
+          */
+          return res.send(objProd,err);
         });
     });
 
@@ -218,7 +225,7 @@ router.route('/Produtos/:id')
 
     .get(function(req,res){
         Produto.findById({_id : req.params.id})
-          .populate('marca')
+          .populate('divisao')
           .populate('precos')
           .populate('imagens')
           .exec(function(err,produto){
@@ -233,7 +240,7 @@ router.route('/Aspiradores/:id')
 
     .get(function(req,res){
         Aspirador.findById({_id : req.params.id, kind : 'Aspirador'})
-          .populate('marca')
+          .populate('divisao')
           .populate('precos')
           .populate('imagens')
           .exec(function(err,produto){
@@ -248,7 +255,7 @@ router.route('/Camas/:id')
 
     .get(function(req,res){
         Cama.findById({_id : req.params.id})
-          .populate('marca')
+          .populate('divisao')
           .populate('precos')
           .populate('imagens')
           .exec(function(err,produto){
@@ -263,7 +270,7 @@ router.route('/Colchoes/:id')
 
     .get(function(req,res){
         Colchoes.findById({_id : req.params.id})
-          .populate('marca')
+          .populate('divisao')
           .populate('precos')
           .populate('imagens')
           .exec(function(err,produto){
@@ -278,7 +285,7 @@ router.route('/Figorificos/:id')
 
     .get(function(req,res){
         Figorifico.findById({_id : req.params.id})
-          .populate('marca')
+          .populate('divisao')
           .populate('precos')
           .populate('imagens')
           .exec(function(err,produto){
@@ -293,7 +300,7 @@ router.route('/MaqsLavarRoupa/:id')
 
     .get(function(req,res){
         MaqLavarRoupa.findById({_id : req.params.id})
-          .populate('marca')
+          .populate('divisao')
           .populate('precos')
           .populate('imagens')
           .exec(function(err,produto){
@@ -308,7 +315,6 @@ router.route('/:type(Produtos|Aspiradores|Camas|Colchoes|Figorificos|MaqsLavarRo
     /*
     .get(function(req,res){
         Produto.findById({_id : req.params.id})
-          .populate('marca')
           .populate('precos')
           .populate('imagens')
           .exec(function(err,produto){

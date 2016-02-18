@@ -11,8 +11,6 @@ var mongoose = require('mongoose');
 
 var routes = require('./routes/index');
 //var users = require('./routes/users');
-require('./models/marca');
-var marcas = require('./routes/marcaApi');
 require('./models/divisao');
 var divisoes = require('./routes/divisaoApi');
 require('./models/loja');
@@ -48,7 +46,6 @@ app.use(passport.session());                                  //added
 
 app.use('/', routes);
 app.use('/auth', authenticate);
-app.use('/api/marcas',marcas);
 app.use('/api/divisoes',divisoes);
 app.use('/api/lojas',lojas);
 app.use('/api/imagens',imagens);

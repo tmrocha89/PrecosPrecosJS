@@ -10,10 +10,7 @@ var produtoSchema = mongoose.Schema({
     	type : mongoose.Schema.Types.ObjectId,
     	ref: 'Divisao'
     },
-    marca : {
-    	type : mongoose.Schema.Types.ObjectId,
-    	ref: 'Marca'
-    },
+    marca : String,
     precos : [{
     	type : mongoose.Schema.Types.ObjectId,
     	ref: 'Preco'

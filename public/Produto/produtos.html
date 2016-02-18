@@ -1,0 +1,31 @@
+<div ng-show="authenticated" >
+	<h4>Produtos</h4>
+	<a href="#/produtos/create">Criar novo produto</a>
+	<table class="table">
+		<tr>
+			<th>ID</th>
+			<th>Nome</th>
+			<th>Observações</th>
+			<th>Divisão</th>
+			<th>Marca</th>
+			<th>Preço</th>
+			<th>Imagem</th>
+			<th>Operações</th>
+		</tr>
+
+		<tr ng-repeat = "produto in produtos" ng-class-odd="'odd'" ng-class-even="'even'">
+			<td>{{produto.id}}</td>
+			<td>{{produto.nome}}</td>
+			<td>{{produto.obs}}</td>
+			<td>{{produto.divisao.nome}}</td>
+			<td>{{produto.marca}}</td>
+			<td>{{produto.precos}}</td>
+			<td>{{produto.imagens}}</td>
+			<td> <a href="#" ng-click="edit({id:produto._id})">Editar</a> |
+			     <a href="#" ng-click="delete({id:produto._id})">Eliminar</a>
+			</td>
+		</tr>
+
+		</table>
+</div>
+
