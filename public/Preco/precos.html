@@ -1,0 +1,25 @@
+<div ng-show="authenticated" >
+	<h4>Precos</h4>
+	<a href="#/precos/{{produtoID}}/create">Criar novo preço</a>
+	<table class="table">
+		<tr>
+			<th>ID</th>
+			<th>Valor</th>
+			<th>É Campanha</th>
+			<th>Loja</th>
+			<th>Operações</th>
+		</tr>
+
+		<tr ng-repeat = "preco in precos" ng-class-odd="'odd'" ng-class-even="'even'">
+			<td>{{preco.id}}</td>
+			<td>{{preco.valor}}</td>
+			<td>{{preco.eCamapanha == 'true' ? 'Sim' : 'ERRADO!!!!'}}</td>
+			<td>{{preco.loja.nome}} / {{preco.loja.local}}</td>
+			<td> <a href="#" ng-click="edit({id:preco._id})">Editar</a> |
+			     <a href="#" ng-click="delete({id:preco._id})">Eliminar</a>
+			</td>
+		</tr>
+
+		</table>
+</div>
+

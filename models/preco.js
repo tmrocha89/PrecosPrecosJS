@@ -4,10 +4,10 @@ var precoSchema = mongoose.Schema({
 
     valor : Number,
     eCampanha : Boolean,
-    loja: [{
+    loja: {
     	type: mongoose.Schema.Types.ObjectId,
     	ref: 'Loja'
-    }]
+    }
 
 });
 

@@ -17,7 +17,7 @@ router.use(function(req,res, next){
 
 router.route('/')
 
-    //obter todas as Divisaos
+    //obter todas os preços
     .get(function(req, res){
       Preco.find({})
         .populate('loja')
@@ -25,6 +25,7 @@ router.route('/')
             if(err){
                return res.send(500, err);
             }
+            console.log(":::::::::::" + precos);
             return res.send(precos);
         });
       /*
@@ -40,10 +41,9 @@ router.route('/')
     //criar uma nova Preco
     .post(function(req, res){
         var preco = new Preco();
-        preco.valor = req.body.nome;
+        preco.valor = req.body.valor;
         preco.eCampanha = req.body.eCampanha;
-        preco.loja.push(req.body.lojaId);
-        console.log(req.body);
+        preco.loja = req.body.loja;
         preco.save(function(err){
            if(err){
                return res.send(500, err); //throw err;
@@ -71,9 +71,9 @@ router.route('/:id')
            if(err){
                return res.send(500, err);
            }
-            preco.valor = req.body.nome;
+            preco.valor = req.body.valor;
             preco.eCampanha = req.body.eCampanha;
-            preco.loja.push(req.body.lojaId);         //fix this !!
+            preco.loja = req.body.loja; 
             preco.save(function(err,Preco){
                if(err){
                    return res.send(500,err);

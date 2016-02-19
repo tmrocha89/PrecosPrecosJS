@@ -36,6 +36,7 @@ var _CREATE = "";
 var _EDIT = "";
 var _DETAIL = "";
 
+
 app.config(function($routeProvider){
 	$routeProvider
 		.when('/', {
@@ -93,24 +94,89 @@ app.config(function($routeProvider){
 			controller : 'produtoController'
 		})
 
+		.when('/precos/:idProduto',{
+			templateUrl : 'Preco/precos.html',
+			controller : 'precoController'
+		})
+
+		.when('/precos/:idProduto/create',{
+			templateUrl : 'Preco/createPreco.html',
+			controller : 'precoController'
+		})
+
+		.when('/precos/:idProduto/edit/:id',{
+			templateUrl : 'Preco/editarPreco.html',
+			controller : 'precoController'
+		})
+
+		.when('/imagens/:idProduto',{
+			templateUrl : 'Imagem/imagens.html',	//Falta
+			controller : 'imagemController'
+		})
+
+		.when('/imagens/:idProduto/create',{
+			templateUrl : 'Imagem/createImagem.html',	//Falta
+			controller : 'imagemController'
+		})
+
 		.when('/camas',{
-			templateUrl : 'divisao.html',
-			controller : 'appController'
+			templateUrl : 'Cama/camas.html',	//Falta
+			controller : 'camaController'
+		})
+
+		.when('/camas/create',{
+			templateUrl : 'Cama/createCama.html',	//Falta
+			controller : 'camaController'
+		})
+
+		.when('/camas/edit/:id',{
+			templateUrl : 'Cama/editarCama.html',	//Falta
+			controller : 'camaController'
 		})
 
 		.when('/colchoes',{
-			templateUrl : 'divisao.html',
-			controller : 'appController'
+			templateUrl : 'Colchao/colchoes.html',	//Falta
+			controller : 'colchaoController'
+		})
+
+		.when('/colchoes/create',{
+			templateUrl : 'Colchao/createColchao.html',	//Falta
+			controller : 'colchaoController'
+		})
+
+		.when('/colchoes/edit/:id',{
+			templateUrl : 'Colchao/editarColchao.html',	//Falta
+			controller : 'colchaoController'
 		})
 
 		.when('/figorificos',{
-			templateUrl : 'divisao.html',
-			controller : 'appController'
+			templateUrl : 'Figorifico/figorificos.html',	//Falta
+			controller : 'figorificoController'
+		})
+
+		.when('/figorificos',{
+			templateUrl : 'Figorifico/createFigorifico.html',
+			controller : 'figorificoController'
+		})
+
+		.when('/figorificos',{
+			templateUrl : 'Figorifico/editarFigorifico.html',
+			controller : 'figorificoController'
 		})
 
 		.when('/maqslavarroupa',{
-			templateUrl : 'divisao.html',
-			controller : 'appController'
+			templateUrl : 'MaqLavarRoupa/maqsLavarRoupa.html',
+			controller : 'maqLavarRoupaController'
+		})
+
+		.when('/maqslavarroupa',{
+			templateUrl : 'MaqLavarRoupa/createMaqLavarRoupa.html',
+			controller : 'maqLavarRoupaController'
+		})
+
+		.when('/maqslavarroupa',{
+			templateUrl : 'MaqLavarRoupa/editarMaqLavarRoupa.html',
+			controller : 'maqLavarRoupaController'
 		})
 
 		.when('/login',{
@@ -150,7 +216,6 @@ app.factory('lojaService', function($resource){ //http
 	    	};
 });
 
-
 /* Service */
 app.factory('produtoService', function($resource){ //http
 	/*var factory = {};factory.getAll = function(){return $http.get('/api/divisoes');}return factory;*/
@@ -162,6 +227,19 @@ app.factory('produtoService', function($resource){ //http
 	        produto: produto
 	    	};
 });
+
+/* Service */
+app.factory('precoService', function($resource){ //http
+	/*var factory = {};factory.getAll = function(){return $http.get('/api/divisoes');}return factory;*/
+	var preco = { valor: 0,  eCampanha: false, loja: {nome:'', local:''} };
+	return {
+			resource: $resource('/api/precos/:id', {id : '@_id'}, {
+				'update': { method:'PUT' }
+			}),
+	        preco: preco
+	    	};
+});
+
 
 app.controller('appController', function($scope){ });
 
@@ -211,7 +289,6 @@ app.controller('divisaoController', function($scope, $location, divisaoService){
 				$location.path('/divisoes');
 			});
 	};
-
 });
 
 
@@ -310,6 +387,73 @@ app.controller('produtoController', function($scope, $location, produtoService, 
 			}, function(err){console.log(err);});
 	};
 });
+
+/*
+	Precos
+*/
+app.controller('precoController', function($scope, $routeParams, $location, precoService, produtoService, lojaService){
+	
+	if($location.$$path.contains("/create"))
+		produtoService.preco = { valor: 0,  eCampanha: false, loja: {nome:'', local:''} };
+
+	$scope.produtoID = $routeParams.idProduto;
+										/* !!!!!! SEGURANÇA !!!!!!!! */
+	$scope.produto = produtoService.resource.get({id:$scope.produtoID},function(produto){
+		console.log("Chegou o produto: "+produto.precos);
+		$scope.precos = [];
+		for(i=0; i < produto.precos.length; i++){
+			precoService.resource.get({id:produto.precos[i]._id}, function(preco){
+				$scope.precos.push(preco);
+			});
+		}
+	});
+
+	$scope.lojas = lojaService.resource.query();
+
+	$scope.preco = precoService.preco;
+
+	console.log("Url do produto: "+$routeParams.idProduto);
+
+	$scope.post = function(){
+		console.log("a fazer um post de preco " + $scope.preco);
+		precoService.resource.save($scope.preco, function(preco){ //alterei novaDivisao
+			console.log("registei: "+preco._id);
+			$scope.produto.precos.push(preco._id);
+			produtoService.resource.update({id:$scope.produtoID},$scope.produto,
+				function(){
+					$location.path('/precos/'+$scope.produtoID);
+				});
+		});
+	};
+
+	$scope.delete = function(precoObj){
+		precoService.resource.delete({id: precoObj.id},function(preco){
+			$location.path('/precos/'+$scope.produtoID);
+		});
+	};
+
+	//este metodo é chamado pelo 'index'
+	$scope.edit = function(precodObj){
+		console.log('editing... /precos/edit/'+precodObj.id);
+		precoService.resource.get({id: precodObj.id},function(preco){
+			precoService.preco = preco;
+			console.log("Preco: "+preco.nome+ "__"+preco._id);
+			$location.path('/precos/'+$scope.produtoID+'/edit/'+preco._id);					// fix me
+		});
+	};
+
+	$scope.update = function(){
+		console.log("teste update");
+		console.log("updating...."+$scope.preco._id);
+		precoService.resource.update({id:$scope.preco._id},$scope.preco,
+			function(){
+				precoService.preco = { valor: 0,  eCampanha: false, loja: {nome:'', local:''} };
+				$location.path('/precos/'+$scope.produtoID);
+			}, function(err){console.log(err);});
+	};
+});
+		
+
 										/*         dependencias              */
 app.controller('authController', function($scope, $rootScope, $http, $location){
 //$http -> Returns a promise with success and error callbacks

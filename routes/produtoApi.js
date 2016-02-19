@@ -24,8 +24,8 @@ global.buildProduto = function(body, produto){
   produto.obs = body.obs;
   produto.divisao = body.divisao;
   produto.marca = body.marca;
-  produto.precos.push(body.precoId);
-  produto.imagens.push(body.imagemId);
+  produto.precos = body.precos;
+  produto.imagens = body.imagens;
 };
 
 global.buildAspirador = function(body, aspirador){
@@ -76,7 +76,7 @@ var registerProduct = function(body, callback){
   }else{
       callback('Nao é um tipo conhecido', null);
     }
-}
+};
 
 //middleware
 /*

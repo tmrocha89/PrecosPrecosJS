@@ -1,0 +1,15 @@
+
+<label for="divisao">Preço</label>
+<input required type="text" class="form-control" placeholder="Valor do produto" ng-model="preco.valor"/>
+
+<label for="divisao">É Camapanha</label>
+<input required type="text" class="form-control" placeholder="Preço de campanha?" ng-model="preco.eCampanha"/> 
+
+<label for="divisao">Lojas</label>
+<select class="form-control" ng-model="preco.loja" >
+	<option ng-repeat = "loja in lojas" value = "{{loja._id}}" 
+	ng-selected ='loja.nome == preco.loja.nome' >
+	{{loja.nome}}</option>
+</select>
+
+<input class="btn submit-btn pull-right" type="submit" value="Guardar" />
