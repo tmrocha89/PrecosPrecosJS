@@ -114,11 +114,6 @@ app.config(function($routeProvider){
 			controller : 'imagemController'
 		})
 
-		.when('/imagens/:idProduto/create',{
-			templateUrl : 'Imagem/createImagem.html',	//Falta
-			controller : 'imagemController'
-		})
-
 		.when('/camas',{
 			templateUrl : 'Cama/camas.html',	//Falta
 			controller : 'camaController'
@@ -243,12 +238,9 @@ app.factory('precoService', function($resource){ //http
 /* Service */
 app.factory('imagemService', function($resource){ //http
 	/*var factory = {};factory.getAll = function(){return $http.get('/api/divisoes');}return factory;*/
-	var imagem = { nome: '',  type: '' , data: '' };
 	return {
 			resource: $resource('/api/imagens/:id', {id : '@_id'}, {
-				'update': { method:'PUT' }
-			}),
-	        imagem: imagem
+				'update': { method:'PUT' }})
 	    	};
 });
 
@@ -264,13 +256,13 @@ app.factory('camaService', function($resource){ //http
 	    	};
 });
 
+
 app.controller('appController', function($scope){ });
 
 
 /*
 	Divisoes
 */
-
 app.controller('divisaoController', function($scope, $location, divisaoService){
 	
 	if($location.$$path == "/produtos/create")
@@ -318,7 +310,6 @@ app.controller('divisaoController', function($scope, $location, divisaoService){
 /*
 	Lojas
 */
-
 app.controller('lojaController', function($scope, $location, lojaService){
 	
 	if($location.$$path == "/lojas/create")
@@ -481,23 +472,9 @@ app.controller('precoController', function($scope, $routeParams, $location, prec
 */
 app.controller('imagemController', function($scope, $routeParams, $location, imagemService, produtoService){
 
-	$scope.imagem = imagemService.imagem;
+	$scope.imagem = { nome: '',  type: '' , data: '' };
 	$scope.produtoID = $routeParams.idProduto;
-		console.log("Url do produto: "+$routeParams.idProduto);
-
-
- $scope.setFile = function(element) {
-	  $scope.currentFile = element.files[0];
-	   var reader = new FileReader();
-
-	  reader.onload = function(event) {
-	    $scope.image_source = event.target.result
-	    $scope.$apply()
-
-	  }
-	  // when the file is read it triggers the onload event above.
-	  $scope.imagem.data = reader.readAsDataURL(element.files[0]);
-};
+	console.log("Url do produto: "+$routeParams.idProduto);
 
 
 										/* !!!!!! SEGURANÇA !!!!!!!! */
@@ -505,65 +482,36 @@ app.controller('imagemController', function($scope, $routeParams, $location, ima
 		console.log("Chegou o produto com as imagens: "+produto.imagens);
 		$scope.imagens = [];
 		for(i=0; i < produto.imagens.length; i++){
-			imagemService.resource.get({id:produto.imagens[i]._id}, function(imagem){
+			imagemService.resource.get({id: produto.imagens[i]._id}, function(imagem){
 				$scope.imagens.push(imagem);
 			});
 		}
 	});
 
 
-
-
 	$scope.post = function(element){
 		$scope.imagem = element.files[0];
 		console.log("a fazer um post de imagem " + $scope.imagem);
-			
-			var reader = new FileReader();
+		var reader = new FileReader();
 
-			reader.onload = function(event){
-				console.log("Resultado:::: " + event.target.result);
-				var novaImagem = {data: event.target.result, nome: $scope.imagem.name, tipo: $scope.imagem.type};
-				imagemService.resource.save(novaImagem, function(imagem){ //alterei novaDivisao
+		reader.onload = function(event){
+//		console.log("Resultado:::: " + event.target.result);
+		var novaImagem = {data: event.target.result, nome: $scope.imagem.name, tipo: $scope.imagem.type};
+		imagemService.resource.save(novaImagem, function(imagem){ //alterei novaDivisao
 
-
-					$scope.produto.imagens.push(imagem._id);
-					produtoService.resource.update({id:$scope.produtoID},$scope.produto,
-						function(){
-							$location.path('/imagens/'+$scope.produtoID);
-						});
+			$scope.produto.imagens.push(imagem._id);
+			produtoService.resource.update({id:$scope.produtoID},$scope.produto,
+				function(){
+					$location.path('/imagens/'+$scope.produtoID);
 				});
-			};
-
-			 reader.readAsDataURL($scope.imagem);
-
-
-
-
+			});
+		};
+		reader.readAsDataURL($scope.imagem);
 	};
-
 	$scope.delete = function(imgObj){
 		imagemService.resource.delete({id: imgObj.id},function(imagem){
 			$location.path('/imagens/'+$scope.produtoID);
 		});
-	};
-
-	//este metodo é chamado pelo 'index'
-	$scope.edit = function(imgObj){
-		console.log('editing... /imagens/edit/'+imgObj.id);
-		precoService.resource.get({id: imgObj.id},function(imagem){
-			imagemService.imagem = imagem;
-			console.log("Preco: "+imagem.nome+ "__"+preco._id);
-			$location.path('/imagens/'+$scope.produtoID+'/edit/'+imagem._id);					// fix me
-		});
-	};
-
-	$scope.update = function(){
-		console.log("teste update");
-		console.log("updating...."+$scope.imagem._id);
-		imagemService.resource.update({id:$scope.imagem._id},$scope.imagem,
-			function(){
-				$location.path('/imagens/'+$scope.produtoID);
-			}, function(err){console.log(err);});
 	};
 });
 

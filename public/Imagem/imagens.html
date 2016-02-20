@@ -4,8 +4,8 @@
 	<p><input type="file" id="trigger" onchange="angular.element(this).scope().post(this)" accept="image/*"></p>
 
 <div class="row">
-  <div class="col-sm-6 col-md-4">
-    <div ng-repeat="imagem in imagens" class="thumbnail">
+  <div class="col-sm-6 col-md-4" ng-repeat="imagem in imagens" >
+    <div class="thumbnail">
       <img src={{imagem.data}} alt={{imagem.nome}}>
       <div class="caption">
         <p><a href="#" class="btn btn-default" role="button" ng-click="delete({id:imagem._id})">Eliminar</a></p>
