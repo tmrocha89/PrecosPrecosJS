@@ -1,0 +1,39 @@
+<div ng-show="authenticated" >
+	<h4>Máquinas de Lavar Roupa</h4>
+	<a href="#/maqslavarroupa/create">Criar figorifico</a>
+	<table class="table">
+		<tr>
+			<th>ID</th>
+			<th>Nome</th>
+			<th>Observações</th>
+			<th>Divisão</th>
+			<th>Marca</th>
+			<th>Preço</th>
+			<th>Imagem</th>
+			<th>Capacidade Congelador</th>
+			<th>Capacidade Figorifico</th>
+			<th>Classe Energetica</th>
+			<th>Operações</th>
+		</tr>
+
+		<tr ng-repeat = "produto in produtos" ng-class-odd="'odd'" ng-class-even="'even'">
+			<td>{{produto.id}}</td>
+			<td>{{produto.nome}}</td>
+			<td>{{produto.obs}}</td>
+			<td>{{produto.divisao.nome}}</td>
+			<td>{{produto.marca}}</td>
+			<td>{{produto.precos.length}} preços</td>
+			<td>{{produto.imagens.length}} imagens</td>
+			<td>{{produto.capCongelador}}</td>
+			<td>{{produto.capFigorifico}}</td>
+			<td>{{produto.classEnergetica}}</td>
+			<td><a href="#/precos/{{produto._id}}">Preços</a> |
+				<a href="#/imagens/{{produto._id}}">Imagens</a> |
+				<a href="#" ng-click="edit({id:produto._id})">Editar</a> |
+			    <a href="#" ng-click="delete({id:produto._id})">Eliminar</a>
+			</td>
+		</tr>
+
+		</table>
+</div>
+

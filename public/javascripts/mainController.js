@@ -129,6 +129,21 @@ app.config(function($routeProvider){
 			controller : 'camaController'
 		})
 
+		.when('/aspiradores',{
+			templateUrl : 'Aspirador/aspiradores.html',	//Falta
+			controller : 'aspiradorController'
+		})
+
+		.when('/aspiradores/create',{
+			templateUrl : 'Aspirador/createAspirador.html',	//Falta
+			controller : 'aspiradorController'
+		})
+
+		.when('/aspiradores/edit/:id',{
+			templateUrl : 'Aspirador/editarAspirador.html',	//Falta
+			controller : 'aspiradorController'
+		})
+
 		.when('/colchoes',{
 			templateUrl : 'Colchao/colchoes.html',	//Falta
 			controller : 'colchaoController'
@@ -149,12 +164,12 @@ app.config(function($routeProvider){
 			controller : 'figorificoController'
 		})
 
-		.when('/figorificos',{
+		.when('/figorificos/create',{
 			templateUrl : 'Figorifico/createFigorifico.html',
 			controller : 'figorificoController'
 		})
 
-		.when('/figorificos',{
+		.when('/figorificos/edit/:id',{
 			templateUrl : 'Figorifico/editarFigorifico.html',
 			controller : 'figorificoController'
 		})
@@ -164,12 +179,12 @@ app.config(function($routeProvider){
 			controller : 'maqLavarRoupaController'
 		})
 
-		.when('/maqslavarroupa',{
+		.when('/maqslavarroupa/create',{
 			templateUrl : 'MaqLavarRoupa/createMaqLavarRoupa.html',
 			controller : 'maqLavarRoupaController'
 		})
 
-		.when('/maqslavarroupa',{
+		.when('/maqslavarroupa/edit/:id',{
 			templateUrl : 'MaqLavarRoupa/editarMaqLavarRoupa.html',
 			controller : 'maqLavarRoupaController'
 		})
@@ -256,6 +271,53 @@ app.factory('camaService', function($resource){ //http
 	    	};
 });
 
+/* Service */
+app.factory('aspiradorService', function($resource){ //http
+	/*var factory = {};factory.getAll = function(){return $http.get('/api/divisoes');}return factory;*/
+	var aspirador = { nome: '', obs: '', divisao: {nome:''}, marca: '', precos: [], imagens:[], potencia:0, decibeis:0, temSaco:false };
+	return {
+			resource: $resource('/api/aspiradores/:id', {id : '@_id'}, {
+				'update': { method:'PUT' }
+			}),
+	        produto: aspirador
+	    	};
+});
+
+/* Service */
+app.factory('colchaoService', function($resource){ //http
+	/*var factory = {};factory.getAll = function(){return $http.get('/api/divisoes');}return factory;*/
+	var colchao = { nome: '', obs: '', divisao: {nome:''}, marca: '', precos: [], imagens:[], altura:0, comprimento:0, largura:0 };
+	return {
+			resource: $resource('/api/colchoes/:id', {id : '@_id'}, {
+				'update': { method:'PUT' }
+			}),
+	        produto: colchao
+	    	};
+});
+
+/* Service */
+app.factory('figorificoService', function($resource){ //http
+	/*var factory = {};factory.getAll = function(){return $http.get('/api/divisoes');}return factory;*/
+	var figorifico = { nome: '', obs: '', divisao: {nome:''}, marca: '', precos: [], imagens:[], capCongelador:0, capFigorifico:0, classEnergetica:0 };
+	return {
+			resource: $resource('/api/figorificos/:id', {id : '@_id'}, {
+				'update': { method:'PUT' }
+			}),
+	        produto: figorifico
+	    	};
+});
+
+/* Service */
+app.factory('maqLavarRoupaService', function($resource){ //http
+	/*var factory = {};factory.getAll = function(){return $http.get('/api/divisoes');}return factory;*/
+	var maqLavarRoupa = { nome: '', obs: '', divisao: {nome:''}, marca: '', precos: [], imagens:[], capacidade:0, temLavagemManual:0, classEnergetica:0 };
+	return {
+			resource: $resource('/api/maqLavarRoupa/:id', {id : '@_id'}, {
+				'update': { method:'PUT' }
+			}),
+	        produto: maqLavarRoupa
+	    	};
+});
 
 app.controller('appController', function($scope){ });
 
@@ -494,8 +556,7 @@ app.controller('imagemController', function($scope, $routeParams, $location, ima
 		console.log("a fazer um post de imagem " + $scope.imagem);
 		var reader = new FileReader();
 
-		reader.onload = function(event){
-//		console.log("Resultado:::: " + event.target.result);
+		reader.onload = function(event){//		console.log("Resultado:::: " + event.target.result);
 		var novaImagem = {data: event.target.result, nome: $scope.imagem.name, tipo: $scope.imagem.type};
 		imagemService.resource.save(novaImagem, function(imagem){ //alterei novaDivisao
 
@@ -516,7 +577,7 @@ app.controller('imagemController', function($scope, $routeParams, $location, ima
 });
 
 /*
-	Produtos
+	Camas
 */
 app.controller('camaController', function($scope, $location, camaService, divisaoService){
 	
@@ -564,6 +625,194 @@ app.controller('camaController', function($scope, $location, camaService, divisa
 	};
 });
 
+/*
+	Aspirador
+*/
+app.controller('aspiradorController', function($scope, $location, aspiradorService, divisaoService){
+	
+	if($location.$$path == "/aspiradores/create")
+		aspiradorService.produto = { nome: '', obs: '', divisao: {nome:''}, marca: '', precos: [], imagens:[], potencia:0, decibeis:0, temSaco:false };
+
+	$scope.produtos = aspiradorService.resource.query();
+	$scope.produto = aspiradorService.produto;
+	$scope.divisoes = divisaoService.resource.query();
+
+
+	console.log($scope.aspiradores);
+
+	$scope.post = function(){
+		console.log("a fazer um post de uma aspirador " + $scope.produto);
+		$scope.produto.kind = "Aspirador";
+		aspiradorService.resource.save($scope.produto, function(){ //alterei novaDivisao
+			$location.path('/aspiradores');
+		});
+	};
+
+	$scope.delete = function(aspiradorObj){
+		aspiradorService.resource.delete({id: aspiradorObj.id},function(aspirador){
+			$location.path('/aspiradores');
+		});
+	};
+
+	//este metodo é chamado pelo 'index'
+	$scope.edit = function(aspiradorObj){
+		console.log('editing... /aspiradores/edit/'+aspiradorObj.id);
+		aspiradorService.resource.get({id: aspiradorObj.id},function(aspirador){
+			aspiradorService.produto = aspirador;
+			console.log("Aspirador: "+aspirador.nome+ "__"+aspirador._id);
+			$location.path('/aspiradores/edit/'+aspirador._id);
+		});
+	};
+
+	$scope.update = function(){
+		console.log("teste update");
+		console.log("updating...."+$scope.produto._id);
+		aspiradorService.resource.update({id:$scope.produto._id},$scope.produto,
+			function(){
+				$location.path('/aspiradores');
+			}, function(err){console.log(err);});
+	};
+});
+
+/*
+	Colchao
+*/
+app.controller('colchaoController', function($scope, $location, colchaoService, divisaoService){
+	
+	if($location.$$path == "/colchoes/create")
+		colchaoService.produto = { nome: '', obs: '', divisao: {nome:''} , marca: '', precos: [], imagens:[] };
+
+	$scope.produtos = colchaoService.resource.query();
+	$scope.produto = colchaoService.produto;
+	$scope.divisoes = divisaoService.resource.query();
+
+
+	$scope.post = function(){
+		console.log("a fazer um post de uma colchao " + $scope.produto);
+		$scope.produto.kind = "Colchao";
+		colchaoService.resource.save($scope.produto, function(){ //alterei novaDivisao
+			$location.path('/colchoes');
+		});
+	};
+
+	$scope.delete = function(colchaoObj){
+		colchaoService.resource.delete({id: colchaoObj.id},function(colchao){
+			$location.path('/colchoes');
+		});
+	};
+
+	//este metodo é chamado pelo 'index'
+	$scope.edit = function(colchaoObj){
+		console.log('editing... /colchoes/edit/'+colchaoObj.id);
+		colchaoService.resource.get({id: colchaoObj.id},function(colchao){
+			colchaoService.produto = colchao;
+			console.log("Colchao: "+colchao.nome+ "__"+colchao._id);
+			$location.path('/colchoes/edit/'+colchao._id);
+		});
+	};
+
+	$scope.update = function(){
+		console.log("teste update");
+		console.log("updating...."+$scope.produto._id);
+		colchaoService.resource.update({id:$scope.produto._id},$scope.produto,
+			function(){
+				$location.path('/colchoes');
+			}, function(err){console.log(err);});
+	};
+});
+
+
+/*
+	Figorifico
+*/
+app.controller('figorificoController', function($scope, $location, figorificoService, divisaoService){
+	
+	if($location.$$path == "/figorificos/create")
+		figorificoService.produto = { nome: '', obs: '', divisao: {nome:''}, marca: '', precos: [], imagens:[], capCongelador:0, capFigorifico:0, classEnergetica:0 };
+
+	$scope.produtos = figorificoService.resource.query();
+	$scope.produto = figorificoService.produto;
+	$scope.divisoes = divisaoService.resource.query();
+
+	$scope.post = function(){
+		console.log("a fazer um post de uma figorifico " + $scope.produto);
+		$scope.produto.kind = "Figorifico";
+		figorificoService.resource.save($scope.produto, function(){ //alterei novaDivisao
+			$location.path('/figorificos');
+		});
+	};
+
+	$scope.delete = function(figorificoObj){
+		figorificoService.resource.delete({id: figorificoObj.id},function(figorifico){
+			$location.path('/figorificos');
+		});
+	};
+
+	//este metodo é chamado pelo 'index'
+	$scope.edit = function(figorificoObj){
+		console.log('editing... /figorificos/edit/'+figorificoObj.id);
+		figorificoService.resource.get({id: figorificoObj.id},function(figorifico){
+			figorificoService.produto = figorifico;
+			console.log("Figorifico: "+figorifico.nome+ "__"+figorifico._id);
+			$location.path('/figorificos/edit/'+figorifico._id);
+		});
+	};
+
+	$scope.update = function(){
+		console.log("teste update");
+		console.log("updating...."+$scope.produto._id);
+		figorificoService.resource.update({id:$scope.produto._id}, $scope.produto,
+			function(){
+				$location.path('/figorificos');
+			}, function(err){console.log(err);});
+	};
+});
+
+/*
+	Maquina de Lavar Roupa
+*/
+app.controller('maqLavarRoupaController', function($scope, $location, maqLavarRoupaService, divisaoService){
+	
+	if($location.$$path == "/maqslavarroupa/create")
+		maqLavarRoupaService.produto = { nome: '', obs: '', divisao: {nome:''}, marca: '', precos: [], imagens:[], capacidade:0, temLavagemManual:0, classEnergetica:0 };
+
+	$scope.produtos = maqLavarRoupaService.resource.query();
+	$scope.produto = maqLavarRoupaService.produto;
+	$scope.divisoes = divisaoService.resource.query();
+
+	$scope.post = function(){
+		console.log("a fazer um post de uma maqLavarRoupa " + $scope.produto);
+		$scope.produto.kind = "Figorifico";
+		maqLavarRoupaService.resource.save($scope.produto, function(){ //alterei novaDivisao
+			$location.path('/maqslavarroupa');
+		});
+	};
+
+	$scope.delete = function(maqRoupaObj){
+		maqLavarRoupaService.resource.delete({id: maqRoupaObj.id},function(maqLavarRoupa){
+			$location.path('/maqslavarroupa');
+		});
+	};
+
+	//este metodo é chamado pelo 'index'
+	$scope.edit = function(maqRoupaObj){
+		console.log('editing... /maqslavarroupa/edit/'+maqRoupaObj.id);
+		maqLavarRoupaService.resource.get({id: maqRoupaObj.id},function(maqLavarRoupa){
+			maqLavarRoupaService.produto = maqLavarRoupa;
+			console.log("Figorifico: "+maqLavarRoupa.nome+ "__"+maqLavarRoupa._id);
+			$location.path('/maqslavarroupa/edit/'+maqLavarRoupa._id);
+		});
+	};
+
+	$scope.update = function(){
+		console.log("teste update");
+		console.log("updating...."+$scope.produto._id);
+		maqLavarRoupaService.resource.update({id:$scope.produto._id}, $scope.produto,
+			function(){
+				$location.path('/maqslavarroupa');
+			}, function(err){console.log(err);});
+	};
+});
 										/*         dependencias              */
 app.controller('authController', function($scope, $rootScope, $http, $location){
 //$http -> Returns a promise with success and error callbacks
