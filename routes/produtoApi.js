@@ -215,6 +215,8 @@ router.route('/:type(Produtos|Aspiradores|Camas|Colchoes|Figorificos|MaqsLavarRo
                       FIX THIS !!!!!!!!
                       PROBLEMS WHEN I TRY SAVE A OBJECT WITHOUT 'divisao'
           */
+          console.log("Obj: " + objProd);
+          console.log("Erro: "+err);
           return res.send(objProd,err);
         });
     });
