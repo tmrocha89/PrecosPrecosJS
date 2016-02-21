@@ -418,7 +418,7 @@ app.controller('lojaController', function($scope, $location, lojaService){
 /*
 	Produtos
 */
-app.controller('produtoController', function($scope, $location, produtoService, divisaoService, imagemService){
+app.controller('produtoController', function($scope, $location, produtoService, divisaoService){
 	
 	if($location.$$path == "/produtos/create")
 		produtoService.produto = { nome: '', obs: '', divisao: {nome:''} , marca: '', precos: [], imagens:[] };
