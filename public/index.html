@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Precos e Precos</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular-route.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.1/angular-resource.js"></script>
+    <script src="javascripts/mainController.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha256-KXn5puMvxCw+dAYznun+drMdG1IFl3agK0p/pqT9KAo= sha512-2e8qq0ETcfWRI4HJBzQiA3UoyFk6tbNyG+qSaIBZLyW9Xf3sWZHN/lxe9fTh1U45DpPf07yj94KsUHHWe4Yk1A==" crossorigin="anonymous"></script>
+    <script src="javascripts/ng-file-upload.min.js"></script>
+       <!-- <link rel="stylesheet" href="stylesheets/style.css"> -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha256-7s5uDGW3AHqw6xtJmNNtr+OBRJUlgkNJEo78P4b0yRw= sha512-nNo+yCHEyn0smMxSswnf/OnX6/KwJuZTlNZBjauKhTK0c+zT+q5JOCx0UFhXQ6rJR9jg6Es8gPuD2uZcYDLqSw==" crossorigin="anonymous">
+
+  </head>
+  <body ng-app="PrecosPrecos">
+  
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Precos &amp; Precos</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Diversos<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#/divisoes">Divisões</a></li>
+            <li><a href="#/lojas">Lojas</a></li>
+          </ul>
+        </li>
+
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Criar Produtos<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#/produtos/create">Produtos</a></li>
+            <li><a href="#/aspiradores/create">Aspiradores</a></li>
+            <li><a href="#/camas/create">Camas</a></li>
+            <li><a href="#/colchoes/create">Colchões</a></li>
+            <li><a href="#/figorificos/create">Figorifico</a></li>
+            <li><a href="#/maqslavarroupa/create">Maq. Lavar Roupa</a></li>
+          </ul>
+        </li>
+
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Listar Produtos<span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <!--<li class="dropdown-header">Listar</li>-->
+            <li><a href="#/produtos">Produtos</a></li>
+            <li><a href="#/aspiradores">Aspiradores</a></li>
+            <li><a href="#/camas">Camas</a></li>
+            <li><a href="#/colchoes">Colchões</a></li>
+            <li><a href="#/figorificos">Figorifico</a></li>
+            <li><a href="#/maqslavarroupa">Maq. Lavar Roupa</a></li>
+          </ul>
+        </li>
+
+
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <li><p class="navbar-text" ng-show="authenticated">Olá {{currentUser}}</li>
+        <li><a href="#/login">Login</a></li>
+        <li> <a href="#/signup">Register</a></li> 
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+
+
+    <div id='main' class="container" ng-controller="appController">
+      <div><!-- class="col-md-offset-2 col-md-8" -->
+        <div ng-view></div>
+      </div>
+    </div>
+  </body>
+</html>
