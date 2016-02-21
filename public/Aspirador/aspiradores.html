@@ -3,13 +3,12 @@
 	<a href="#/camas/create">Criar novo aspirador</a>
 	<table class="table">
 		<tr>
-			<th>ID</th>
+			<th>Imagem</th>
 			<th>Nome</th>
 			<th>Observações</th>
 			<th>Divisão</th>
 			<th>Marca</th>
 			<th>Preço</th>
-			<th>Imagem</th>
 			<th>Decibeis</th>
 			<th>Potencia</th>
 			<th>Tem Saco</th>
@@ -17,13 +16,14 @@
 		</tr>
 
 		<tr ng-repeat = "produto in produtos" ng-class-odd="'odd'" ng-class-even="'even'">
-			<td>{{produto.id}}</td>
+			<!-- How to make this a template ??? -->
+			<td ng-show="produto.imagens.length > 0"><img src={{produto.imagens[0].data}} width="100" height="100" /></td>
+			<td ng-hide="produto.imagens.length > 0">Sem imagens disponiveis {{produtlo.imagens.length}}</td>
 			<td>{{produto.nome}}</td>
 			<td>{{produto.obs}}</td>
 			<td>{{produto.divisao.nome}}</td>
 			<td>{{produto.marca}}</td>
 			<td>{{produto.precos.length}} preços</td>
-			<td>{{produto.imagens.length}} imagens</td>
 			<td>{{produto.decibeis}}</td>
 			<td>{{produto.potencia}}</td>
 			<td>{{produto.temSaco}}</td>

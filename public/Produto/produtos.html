@@ -3,24 +3,24 @@
 	<a href="#/produtos/create">Criar novo produto</a>
 	<table class="table">
 		<tr>
-			<th>ID</th>
+			<th>Imagem</th>
 			<th>Nome</th>
 			<th>Observações</th>
 			<th>Divisão</th>
 			<th>Marca</th>
 			<th>Preço</th>
-			<th>Imagem</th>
 			<th>Operações</th>
 		</tr>
 
 		<tr ng-repeat = "produto in produtos" ng-class-odd="'odd'" ng-class-even="'even'">
-			<td>{{produto.id}}</td>
+		<!-- How to make this a template ??? -->
+			<td ng-show="produto.imagens.length > 0"><img src={{produto.imagens[0].data}} width="100" height="100" /></td>
+			<td ng-hide="produto.imagens.length > 0">Sem imagens disponiveis {{produtlo.imagens.length}}</td>
 			<td>{{produto.nome}}</td>
 			<td>{{produto.obs}}</td>
 			<td>{{produto.divisao.nome}}</td>
 			<td>{{produto.marca}}</td>
 			<td>{{produto.precos.length}} preços</td>
-			<td>{{produto.imagens.length}} imagens</td>
 			<td><a href="#/precos/{{produto._id}}">Preços</a> |
 				<a href="#/imagens/{{produto._id}}">Imagens</a> |
 				<a href="#" ng-click="edit({id:produto._id})">Editar</a> |

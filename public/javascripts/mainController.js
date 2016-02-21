@@ -418,12 +418,14 @@ app.controller('lojaController', function($scope, $location, lojaService){
 /*
 	Produtos
 */
-app.controller('produtoController', function($scope, $location, produtoService, divisaoService){
+app.controller('produtoController', function($scope, $location, produtoService, divisaoService, imagemService){
 	
 	if($location.$$path == "/produtos/create")
 		produtoService.produto = { nome: '', obs: '', divisao: {nome:''} , marca: '', precos: [], imagens:[] };
 
 	$scope.produtos = produtoService.resource.query();
+
+
 	$scope.produto = produtoService.produto;
 	$scope.divisoes = divisaoService.resource.query();
 
