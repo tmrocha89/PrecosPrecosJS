@@ -1,6 +1,6 @@
 <div ng-show="authenticated" >
 	<h4>Máquinas de Lavar Roupa</h4>
-	<a href="#/maqslavarroupa/create">Criar figorifico</a>
+	<a href="#/maqslavarroupa/create">Criar máquina de lavar roupa</a>
 	<table class="table">
 		<tr>
 			<th>ID</th>
@@ -10,8 +10,8 @@
 			<th>Marca</th>
 			<th>Preço</th>
 			<th>Imagem</th>
-			<th>Capacidade Congelador</th>
-			<th>Capacidade Figorifico</th>
+			<th>Capacidade</th>
+			<th>Tem lavagem manual</th>
 			<th>Classe Energetica</th>
 			<th>Operações</th>
 		</tr>
@@ -24,8 +24,8 @@
 			<td>{{produto.marca}}</td>
 			<td>{{produto.precos.length}} preços</td>
 			<td>{{produto.imagens.length}} imagens</td>
-			<td>{{produto.capCongelador}}</td>
-			<td>{{produto.capFigorifico}}</td>
+			<td>{{produto.capacidade}}</td>
+			<td>{{produto.temLavagemManual}}</td>
 			<td>{{produto.classEnergetica}}</td>
 			<td><a href="#/precos/{{produto._id}}">Preços</a> |
 				<a href="#/imagens/{{produto._id}}">Imagens</a> |

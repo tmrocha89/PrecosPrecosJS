@@ -271,14 +271,16 @@ router.route('/Camas/:id')
 router.route('/Colchoes/:id')
 
     .get(function(req,res){
-        Colchoes.findById({_id : req.params.id})
+        Colchao.findById({_id : req.params.id})
           .populate('divisao')
           .populate('precos')
           .populate('imagens')
           .exec(function(err,produto){
            if(err){
+            console.log("Erro get colchoes: "+err);
                return res.send(500,err);
            }
+           console.log("entrei: "+produto);
             return res.json(produto);
         });
     });

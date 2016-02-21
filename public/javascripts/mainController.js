@@ -312,7 +312,7 @@ app.factory('maqLavarRoupaService', function($resource){ //http
 	/*var factory = {};factory.getAll = function(){return $http.get('/api/divisoes');}return factory;*/
 	var maqLavarRoupa = { nome: '', obs: '', divisao: {nome:''}, marca: '', precos: [], imagens:[], capacidade:0, temLavagemManual:0, classEnergetica:0 };
 	return {
-			resource: $resource('/api/maqLavarRoupa/:id', {id : '@_id'}, {
+			resource: $resource('/api/MaqsLavarRoupa/:id', {id : '@_id'}, {
 				'update': { method:'PUT' }
 			}),
 	        produto: maqLavarRoupa
@@ -783,7 +783,7 @@ app.controller('maqLavarRoupaController', function($scope, $location, maqLavarRo
 
 	$scope.post = function(){
 		console.log("a fazer um post de uma maqLavarRoupa " + $scope.produto);
-		$scope.produto.kind = "Figorifico";
+		$scope.produto.kind = "MaqLavarRoupa";
 		maqLavarRoupaService.resource.save($scope.produto, function(){ //alterei novaDivisao
 			$location.path('/maqslavarroupa');
 		});
