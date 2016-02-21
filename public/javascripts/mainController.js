@@ -469,10 +469,11 @@ app.controller('produtoController', function($scope, $location, produtoService, 
 */
 app.controller('precoController', function($scope, $routeParams, $location, precoService, produtoService, lojaService){
 	
-	if($location.$$path.contains("/create"))
+	$scope.produtoID = $routeParams.idProduto;
+
+	if(/^(create)$/.test($location.$$path) )
 		prService.preco = { valor: 0,  eCampanha: false, loja: {nome:'', local:''} };  // ?????????????????????????????????????????
 
-	$scope.produtoID = $routeParams.idProduto;
 										/* !!!!!! SEGURANÇA !!!!!!!! */
 	$scope.produto = produtoService.resource.get({id:$scope.produtoID},function(produto){
 		console.log("Chegou o produto: "+produto.precos);
