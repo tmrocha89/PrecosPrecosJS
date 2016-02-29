@@ -13,7 +13,7 @@
 		<tr ng-repeat = "preco in precos" ng-class-odd="'odd'" ng-class-even="'even'">
 			<td>{{preco.id}}</td>
 			<td>{{preco.valor}}</td>
-			<td>{{preco.eCamapanha == 'true' ? 'Sim' : 'ERRADO!!!!'}}</td>
+			<td>{{preco.eCampanha == true ? 'Sim' : 'Não'}}</td>
 			<td>{{preco.loja.nome}} / {{preco.loja.local}}</td>
 			<td> <a href="#" ng-click="edit({id:preco._id})">Editar</a> |
 			     <a href="#" ng-click="delete({id:preco._id})">Eliminar</a>
