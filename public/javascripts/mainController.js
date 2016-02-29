@@ -429,7 +429,21 @@ app.controller('produtoController', function($scope, $location, produtoService, 
 	$scope.produto = produtoService.produto;
 	$scope.divisoes = divisaoService.resource.query();
 
-
+	$scope.getPrecoText = function(precos){
+		var cheaper = {valor: 'Sem preços', text: ''};
+		var size = precos.length;
+		if(size > 0){
+			cheaper.valor = precos[0].valor;
+			for(var i=1; i < precos.length; i++){
+				if(cheaper.valor > precos[i].valor){
+					cheaper.valor = precos[i].valor;
+				}
+			}
+			if(size>1) cheaper.text = '(+)';
+		}
+		return cheaper.valor+' '+cheaper.text;
+	};
+	
 	console.log($scope.produtos);
 
 	$scope.post = function(){

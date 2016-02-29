@@ -20,7 +20,7 @@
 			<td>{{produto.obs}}</td>
 			<td>{{produto.divisao.nome}}</td>
 			<td>{{produto.marca}}</td>
-			<td>{{produto.precos.length}} preços</td>
+			<td>€ {{getPrecoText(produto.precos)}}</td>
 			<td><a href="#/precos/{{produto._id}}">Preços</a> |
 				<a href="#/imagens/{{produto._id}}">Imagens</a> |
 				<a href="#" ng-click="edit({id:produto._id})">Editar</a> |
