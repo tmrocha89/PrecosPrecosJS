@@ -1,4 +1,6 @@
 var mongoose = require('mongoose');
+var Precos = mongoose.model('Preco');
+var Imagens = mongoose.model('Imagem');
 
 var options = {discriminatorKey: 'kind'};
 
@@ -21,7 +23,29 @@ var produtoSchema = mongoose.Schema({
     }]
 }, options); //{collection : 'produtos', discriminatorKey : 'kind'});
 
+/*
+*
+*  Middleware: Deletes preco and imagens 
+*
+*/
+produtoSchema.post('remove', function(/* next */){
+	if(this.precos){
+		for (var p = this.precos.length - 1; p >= 0; p--) {
+			Precos.remove({ _id : this.precos[p]}).exec();
+		}
+	}
+console.log(this.imagens);
+	if(this.imagens){
+		for (var i = this.imagens.length - 1; i >= 0; i--) {
+			Imagens.remove({ _id : this.imagens[i]}).exec();
+		}
+	}
+
+	//return next(); ??????????????????????????????????????????????????????????????????????????
+});
+
 var Produto = mongoose.model('Produto', produtoSchema);
+
 
 var aspiradorSchema = mongoose.Schema({
 	decibeis : Number,

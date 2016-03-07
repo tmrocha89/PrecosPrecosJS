@@ -71,6 +71,7 @@ var registerProduct = function(body, callback){
     if(typeof objProd === "object"){
       var funcName = constructors[body.kind].builderName;
       global[funcName](body, objProd);
+      console.log("vou guardar......");
       objProd.save(callback);
     }
   }else{
@@ -352,12 +353,18 @@ router.route('/:type(Produtos|Aspiradores|Camas|Colchoes|Figorificos|MaqsLavarRo
 
 
     .delete(function(req,res){
-        Produto.remove({_id : req.params.id}, function(err){
-            if(err){
-                return res.send(500, err);
-            }
-            return res.json(req.params.id +' deleted');
-        });
+      Produto.findOne({ _id: req.params.id }, function(err,produto){
+        produto.remove();
+      });
+/*
+          Produto.remove({_id : req.params.id}, function(err){
+              if(err){
+                  return res.send(500, err);
+              }
+
+              return res.json(req.params.id +' deleted');
+          });
+*/
     });
 
 module.exports = router;

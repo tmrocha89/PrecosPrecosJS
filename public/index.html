@@ -31,7 +31,7 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="dropdown">
+        <li ng-show="authenticated" class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Diversos<span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="#/divisoes">Divisões</a></li>
@@ -39,7 +39,7 @@
           </ul>
         </li>
 
-        <li class="dropdown">
+        <li ng-show="authenticated" class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Criar Produtos<span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="#/produtos/create">Produtos</a></li>
@@ -51,7 +51,7 @@
           </ul>
         </li>
 
-        <li class="dropdown">
+        <li ng-show="authenticated" class="dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Listar Produtos<span class="caret"></span></a>
           <ul class="dropdown-menu">
             <!--<li class="dropdown-header">Listar</li>-->
@@ -69,8 +69,8 @@
 
       <ul class="nav navbar-nav navbar-right">
         <li><p class="navbar-text" ng-show="authenticated">Olá {{currentUser}}</li>
-        <li><a href="#/login">Login</a></li>
-        <li> <a href="#/signup">Register</a></li> 
+        <li><a ng-hide="authenticated" href="#/login">Login</a></li>
+        <li><a ng-hide="authenticated" href="#/signup">Register</a></li> 
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
