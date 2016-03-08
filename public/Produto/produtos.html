@@ -14,7 +14,7 @@
 
 		<tr ng-repeat = "produto in produtos" ng-class-odd="'odd'" ng-class-even="'even'">
 		<!-- How to make this a template ??? -->
-			<td ng-show="produto.imagens.length > 0"><img src={{produto.imagens[0].data}} width="100" height="100" /></td>
+		<!--	<td ng-show="produto.imagens.length > 0"><img src={{produto.imagens[0].data}} width="100" height="100" /></td> -->
 			<td ng-hide="produto.imagens.length > 0">Sem imagens disponiveis {{produtlo.imagens.length}}</td>
 			<td>{{produto.nome}}</td>
 			<td>{{produto.obs}}</td>

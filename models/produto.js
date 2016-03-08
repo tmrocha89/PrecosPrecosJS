@@ -4,6 +4,23 @@ var Imagens = mongoose.model('Imagem');
 
 var options = {discriminatorKey: 'kind'};
 
+
+var removeChilds = function(/* next */){
+	if(this.precos){
+		for (var p = this.precos.length - 1; p >= 0; p--) {
+			Precos.remove({ _id : this.precos[p]}).exec();
+		}
+	}
+
+	if(this.imagens){
+		for (var i = this.imagens.length - 1; i >= 0; i--) {
+			Imagens.remove({ _id : this.imagens[i]}).exec();
+		}
+	}
+
+	//return next(); ??????????????????????????????????????????????????????????????????????????
+};
+
 var produtoSchema = mongoose.Schema({
 
     nome : String,
@@ -28,21 +45,7 @@ var produtoSchema = mongoose.Schema({
 *  Middleware: Deletes preco and imagens 
 *
 */
-produtoSchema.post('remove', function(/* next */){
-	if(this.precos){
-		for (var p = this.precos.length - 1; p >= 0; p--) {
-			Precos.remove({ _id : this.precos[p]}).exec();
-		}
-	}
-console.log(this.imagens);
-	if(this.imagens){
-		for (var i = this.imagens.length - 1; i >= 0; i--) {
-			Imagens.remove({ _id : this.imagens[i]}).exec();
-		}
-	}
-
-	//return next(); ??????????????????????????????????????????????????????????????????????????
-});
+produtoSchema.post('remove', removeChilds);
 
 var Produto = mongoose.model('Produto', produtoSchema);
 
@@ -54,6 +57,8 @@ var aspiradorSchema = mongoose.Schema({
 	classEnergetica : String
 }, options);
 
+aspiradorSchema.post('remove', removeChilds);
+
 Produto.discriminator('Aspirador', aspiradorSchema);
 
 var camaSchema = mongoose.Schema({
@@ -61,6 +66,8 @@ var camaSchema = mongoose.Schema({
 	largura: Number,
 	altura: Number
 }, options);
+
+camaSchema.post('remove', removeChilds);
 
 Produto.discriminator('Cama', camaSchema);
 
@@ -70,6 +77,8 @@ var colchaoSchema = mongoose.Schema({
 	altura: Number
 }, options);
 
+colchaoSchema.post('remove', removeChilds);
+
 Produto.discriminator('Colchao', colchaoSchema);
 
 var figorificoSchema = mongoose.Schema({
@@ -78,6 +87,8 @@ var figorificoSchema = mongoose.Schema({
 	classEnergetica : String
 }, options);
 
+figorificoSchema.post('remove', removeChilds);
+
 Produto.discriminator('Figorifico', figorificoSchema);
 
 var maqLavarRoupaSchema = mongoose.Schema({
@@ -85,5 +96,7 @@ var maqLavarRoupaSchema = mongoose.Schema({
 	temLavagemManual : Boolean,
 	classEnergetica : String
 }, options);
+
+maqLavarRoupaSchema.post('remove', removeChilds);
 
 Produto.discriminator('MaqLavarRoupa', maqLavarRoupaSchema);

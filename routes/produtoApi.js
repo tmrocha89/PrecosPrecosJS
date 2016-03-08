@@ -7,6 +7,7 @@ var Cama = mongoose.model('Cama');
 var Colchao = mongoose.model('Colchao');
 var Figorifico = mongoose.model('Figorifico');
 var MaqLavarRoupa = mongoose.model('MaqLavarRoupa');
+var ObjectID = mongoose.ObjectID;
 
 var constructors = [];
 constructors['Produto'] = { constructor: new Produto(), builderName: 'buildProduto' };
@@ -63,21 +64,26 @@ global.buildMaqLavarRoupa = function(body, maqLavarRoupa){
   maqLavarRoupa.classEnergetica = body.classEnergetica;
 };
 
+/*
 var registerProduct = function(body, callback){
   if(body.kind === undefined)
     body.kind = 'Produto';
+  console.log("Body Kind: " + body.kind);
   var objProd = constructors[body.kind].constructor;
   if(objProd){
     if(typeof objProd === "object"){
       var funcName = constructors[body.kind].builderName;
+      console.log("FuncName: " + funcName);
       global[funcName](body, objProd);
-      console.log("vou guardar......");
+      objProd._id = new ObjectID();
+      //Produto.collection.insert(objProd,callback);
       objProd.save(callback);
     }
   }else{
       callback('Nao é um tipo conhecido', null);
     }
 };
+*/
 
 //middleware
 /*
@@ -188,40 +194,117 @@ router.route('/MaqsLavarRoupa')
         });
     });
 
-
-router.route('/:type(Produtos|Aspiradores|Camas|Colchoes|Figorificos|MaqsLavarRoupa)')
 /*
-    //obter todas os Produtos
-    .get(function(req, res){
-      Produto.find({})
-        .populate('precos')
-        .populate('imagens')
-        .exec(function(err,produtos){
-            if(err){
-               return res.send(500, err);
-            }
-            return res.send(produtos);
-        });
-    })
-*/
+router.route('/:type(Produtossss|Aspiradores|Camas|Colchoes|Figorificos|MaqsLavarRoupa)')
     //criar uma nova Produto
-    .post(function(req, res){ 
+    .post(function(req, res){
+      console.log("vou guardar o produto........");
+      console.log(req.body);
         registerProduct(req.body, function(err,objProd){
-          /*if(err){
+          if(err){
             return res.send(err);
           }
           console.log("guardado "+objProd);
-          return res.send(objProd);*/
+          return res.send(objProd);
           /*
                       FIX THIS !!!!!!!!
                       PROBLEMS WHEN I TRY SAVE A OBJECT WITHOUT 'divisao'
           */
-          console.log("Obj: " + objProd);
-          console.log("Erro: "+err);
-          return res.send(objProd,err);
+          //console.log("Post Obj: " + objProd);
+          //console.log("Post Erro: "+err);
+          //return res.send(objProd,err);
+ //       });
+//    });
+
+
+router.route('/:type(Produtos)')
+    .post(function(req, res){
+      var produto = new Produto();
+      buildProduto(req.body,produto);
+      produto.save( function(err,objProd){
+          if(err){
+            console.log(err);
+            return res.send(err);
+          }
+          console.log("guardado "+objProd);
+          return res.send(objProd);
         });
     });
 
+
+router.route('/:type(Aspiradores)')
+    .post(function(req, res){
+      var aspirador = new Aspirador();
+      buildAspirador(req.body, aspirador);
+        aspirador.save( function(err,objProd){
+          if(err){
+            console.log(err);
+            return res.send(err);
+          }
+          console.log("guardado "+objProd);
+          return res.send(objProd);
+        });
+    });
+
+router.route('/:type(Camas)')
+    .post(function(req, res){
+      var cama = new Cama();
+      buildCama(req.body,cama);
+      cama.save( function(err,objProd){
+          if(err){
+            console.log(err);
+            return res.send(err);
+          }
+          console.log("guardado "+objProd);
+          return res.send(objProd);
+        }); 
+    });
+
+
+
+router.route('/:type(Colchoes)')
+    .post(function(req, res){
+      var colchao = new Colchao();
+      buildColchao(req.body,colchao);
+        colchao.save( function(err,objProd){
+          if(err){
+            console.log(err);
+            return res.send(err);
+          }
+          console.log("guardado "+objProd);
+          return res.send(objProd);
+        });
+    });
+
+
+router.route('/:type(Figorificos)')
+    .post(function(req, res){
+      var figorifico = new Figorifico();
+      buildFigorifico(req.body,figorifico);
+      figorifico.save( function(err,objProd){
+        if(err){
+          console.log(err);
+          return res.send(err);
+        }
+        console.log("guardado "+objProd);
+        return res.send(objProd);
+      });
+    });
+
+
+router.route('/:type(MaqsLavarRoupa)')
+    .post(function(req, res){
+      var maqLavarRoupa = new MaqLavarRoupa();
+      buildMaqLavarRoupa(req.body, maqLavarRoupa);
+      maqLavarRoupa.save( function(err,objProd){
+          if(err){
+            console.log(err);
+            return res.send(err);
+          }
+          console.log("guardado "+objProd);
+          return res.send(objProd);
+        });
+    });
 
 
 router.route('/Produtos/:id')
@@ -356,15 +439,6 @@ router.route('/:type(Produtos|Aspiradores|Camas|Colchoes|Figorificos|MaqsLavarRo
       Produto.findOne({ _id: req.params.id }, function(err,produto){
         produto.remove();
       });
-/*
-          Produto.remove({_id : req.params.id}, function(err){
-              if(err){
-                  return res.send(500, err);
-              }
-
-              return res.json(req.params.id +' deleted');
-          });
-*/
     });
 
 module.exports = router;
