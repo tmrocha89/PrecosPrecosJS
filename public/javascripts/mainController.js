@@ -834,7 +834,7 @@ app.controller('maqLavarRoupaController', function($scope, $location, maqLavarRo
 		console.log("updating...."+$scope.produto._id);
 		maqLavarRoupaService.resource.update({id:$scope.produto._id}, $scope.produto,
 			function(){
-				$location.path('/maqslavarroupa');
+				$location.path('#/maqslavarroupa');
 			}, function(err){console.log(err);});
 	};
 });
