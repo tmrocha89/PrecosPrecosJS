@@ -1,6 +1,14 @@
 <div ng-show="authenticated" >
 	<h4>Produtos</h4>
 	<a href="#/produtos/create">Criar novo produto</a>
+<p>
+<label for="divisao">Divisão</label>
+<select class="form-control" ng-model="filter.divisao" >
+	<option  value = "ALL" selected >Todas</option>
+	<option ng-repeat = "divisao in divisoes" value = "{{divisao.nome}}">{{divisao.nome}}</option>
+</select>
+</p>
+
 	<table class="table">
 		<tr>
 			<th>Imagem</th>
@@ -11,8 +19,7 @@
 			<th>Preço</th>
 			<th>Operações</th>
 		</tr>
-
-		<tr ng-repeat = "produto in produtos" ng-class-odd="'odd'" ng-class-even="'even'">
+		<tr ng-repeat = "produto in produtos" ng-class-odd="'odd'" ng-class-even="'even'" ng-show="filter.divisao == 'ALL' || produto.divisao.nome == filter.divisao">
 		<!-- How to make this a template ??? -->
 		<td ng-show="produto.imagens.length > 0"><img src={{produto.imagens[0].data}} width="100" height="100" /></td>
 			<td ng-hide="produto.imagens.length > 0">Sem imagens disponiveis {{produtlo.imagens.length}}</td>

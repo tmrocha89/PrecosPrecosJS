@@ -425,6 +425,7 @@ app.controller('produtoController', function($scope, $location, produtoService, 
 
 	$scope.produtos = produtoService.resource.query();
 
+$scope.filter = {divisao:'ALL'};
 
 	$scope.produto = produtoService.produto;
 	$scope.divisoes = divisaoService.resource.query();
@@ -478,6 +479,7 @@ app.controller('produtoController', function($scope, $location, produtoService, 
 				$location.path('/produtos');
 			}, function(err){console.log(err);});
 	};
+
 });
 
 /*
