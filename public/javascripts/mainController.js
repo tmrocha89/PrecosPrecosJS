@@ -556,16 +556,20 @@ app.controller('imagemController', function($scope, $routeParams, $location, ima
 	console.log("Url do produto: "+$routeParams.idProduto);
 
 
-										/* !!!!!! SEGURANÇA !!!!!!!! */
-	$scope.produto = produtoService.resource.get({id:$scope.produtoID},function(produto){
-		console.log("Chegou o produto com as imagens: "+produto.imagens);
-		$scope.imagens = [];
-		for(var i=0; i < produto.imagens.length; i++){
-			imagemService.resource.get({id: produto.imagens[i]._id}, function(imagem){
-				$scope.imagens.push(imagem);
-			});
-		}
-	});
+	var loadProductWithImages = function(){
+		return produtoService.resource.get({id:$scope.produtoID},function(produto){
+			console.log("Chegou o produto com as imagens: "+produto.imagens);
+			$scope.imagens = [];
+			for(var i=0; i < produto.imagens.length; i++){
+				imagemService.resource.get({id: produto.imagens[i]._id}, function(imagem){
+					$scope.imagens.push(imagem);
+				});
+			}
+		});
+	};
+
+	/* !!!!!! SEGURANÇA !!!!!!!! */
+	$scope.produto = loadProductWithImages();
 
 
 	$scope.post = function(element){
@@ -582,14 +586,13 @@ app.controller('imagemController', function($scope, $routeParams, $location, ima
 				produtoService.resource.update({id:$scope.produtoID},$scope.produto,
 					function(){
 						console.log("Eu deveria estar a redirecionar");
+						$scope.produto = loadProductWithImages();
 						$location.path('/imagens/'+$scope.produtoID);
 					},function(err){
 						console.log("Erro uploading images");
 						console.log(err);
 					});
 				});
-									console.log("Eu deveria estar a redirecionar222222");
-
 		};
 		reader.readAsDataURL($scope.imagem);
 	};
