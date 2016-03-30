@@ -14,7 +14,6 @@ var app = angular.module('PrecosPrecos', ['ngRoute', 'ngResource']).run(function
 		$rootScope.authenticated = false;
 		$rootScope.currentUser = '';
 	};
-
 });
 
 var DIVISAO_INDEX = "";
@@ -336,7 +335,7 @@ app.controller('divisaoController', function($scope, $location, divisaoService){
 
 	$scope.post = function(){
 		console.log("a fazer um post de divisao " + $scope.divisao.nome);
-		divisaoService.resource.save($scope.divisao, function(){ //alterei novaDivisao
+		divisaoService.resource.save($scope.divisao, function(){
 			$location.path('/divisoes');
 		});
 	};
@@ -418,14 +417,14 @@ app.controller('lojaController', function($scope, $location, lojaService){
 /*
 	Produtos
 */
-app.controller('produtoController', function($scope, $location, produtoService, divisaoService){
+app.controller('produtoController', function($scope, $location, produtoService, divisaoService, imagemService){
 	
 	if($location.$$path == "/produtos/create")
 		produtoService.produto = { nome: '', obs: '', divisao: {nome:''} , marca: '', precos: [], imagens:[] };
 
 	$scope.produtos = produtoService.resource.query();
 
-$scope.filter = {divisao:'ALL'};
+	$scope.filter = {divisao:'ALL'};
 
 	$scope.produto = produtoService.produto;
 	$scope.divisoes = divisaoService.resource.query();
@@ -444,12 +443,28 @@ $scope.filter = {divisao:'ALL'};
 		}
 		return cheaper.valor+' '+cheaper.text;
 	};
-	
-	console.log($scope.produtos);
+
+	$scope.imagens = imagemService.resource.query();
+
+	console.log($scope.imagens);
+
+	$scope.getImagem = function(imagemID){
+		var imagem;console.log("entrei: " + imagemID);
+		for (var i = 0; i < $scope.imagens.length && !imagem; i++) {
+			console.log("searching: " + $scope.imagens[i]._id);
+
+			if($scope.imagens[i]._id == imagemID)
+				imagem = $scope.imagens[i];
+		}
+		console.log(JSON.stringify(imagem));
+		return imagem;
+	}
+
+		console.log($scope.produtos);
 
 	$scope.post = function(){
 		console.log("a fazer um post de produto " + $scope.produto);
-		produtoService.resource.save($scope.produto, function(){ //alterei novaDivisao
+		produtoService.resource.save($scope.produto, function(){
 			$location.path('/produtos');
 		});
 	};

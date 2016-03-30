@@ -104,7 +104,7 @@ router.route('/Produtos')
       Produto.find({})
         .populate('divisao')
         .populate('precos')
-        .populate('imagens')
+        //.populate('imagens')
         .exec(function(err,produtos){
             if(err){
               console.log("erro:: "+err);
@@ -121,7 +121,7 @@ router.route('/Aspiradores')
       Aspirador.find({})
         .populate('divisao')
         .populate('precos')
-        .populate('imagens')
+        //.populate('imagens')
         .exec(function(err,produtos){
             if(err){
                return res.send(500, err);
@@ -137,7 +137,7 @@ router.route('/Camas')
       Cama.find({})
         .populate('divisao')
         .populate('precos')
-        .populate('imagens')
+        //.populate('imagens')
         .exec(function(err,produtos){
             if(err){
                return res.send(500, err);
@@ -153,7 +153,7 @@ router.route('/Colchoes')
       Colchao.find({})
         .populate('divisao')
         .populate('precos')
-        .populate('imagens')
+        //.populate('imagens')
         .exec(function(err,produtos){
             if(err){
                return res.send(500, err);
@@ -169,7 +169,7 @@ router.route('/Figorificos')
       Figorifico.find({})
         .populate('divisao')
         .populate('precos')
-        .populate('imagens')
+        //.populate('imagens')
         .exec(function(err,produtos){
             if(err){
                return res.send(500, err);
@@ -185,7 +185,7 @@ router.route('/MaqsLavarRoupa')
       MaqLavarRoupa.find({})
         .populate('divisao')
         .populate('precos')
-        .populate('imagens')
+        //.populate('imagens')
         .exec(function(err,produtos){
             if(err){
                return res.send(500, err);

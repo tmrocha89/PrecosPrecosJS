@@ -46,10 +46,12 @@ router.route('/')
 router.route('/:id')
 
     .get(function(req,res){
+      console.log("trying....");
         Imagem.findById(req.params.id, function(err,imagem){
            if(err){
                return res.send(500,err);
            }
+           console.log("imagem a caminho" + imagem.nome);
             return res.json(imagem);
         });
     })
