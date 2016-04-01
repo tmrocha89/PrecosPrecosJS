@@ -1,6 +1,7 @@
 <div ng-show="authenticated" >
-	<h4>Precos</h4>
-	<a href="#/precos/{{produtoID}}/create">Criar novo preço</a>
+	<h4>Precos - {{produto.nome}}</h4>
+	<p><img ng-show="imagem" src={{imagem.data}} width="100" height="100" /></p>
+	<p><a href="#/precos/{{produtoID}}/create">Criar novo preço</a></p>
 	<table class="table">
 		<tr>
 			<th>ID</th>

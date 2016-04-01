@@ -446,24 +446,25 @@ app.controller('produtoController', function($scope, $location, produtoService, 
 
 	$scope.imagens = imagemService.resource.query();
 
-	console.log($scope.imagens);
+	//console.log($scope.imagens);
 
 	$scope.getImagem = function(imagemID){
-		var imagem;console.log("entrei: " + imagemID);
+		var imagem;
+		//console.log("entrei: " + imagemID);
 		for (var i = 0; i < $scope.imagens.length && !imagem; i++) {
-			console.log("searching: " + $scope.imagens[i]._id);
+			//console.log("searching: " + $scope.imagens[i]._id);
 
 			if($scope.imagens[i]._id == imagemID)
 				imagem = $scope.imagens[i];
 		}
-		console.log(JSON.stringify(imagem));
+		//console.log(JSON.stringify(imagem));
 		return imagem;
 	}
 
-		console.log($scope.produtos);
+	//console.log($scope.produtos);
 
 	$scope.post = function(){
-		console.log("a fazer um post de produto " + $scope.produto);
+		//console.log("a fazer um post de produto " + $scope.produto);
 		produtoService.resource.save($scope.produto, function(){
 			$location.path('/produtos');
 		});
@@ -477,17 +478,17 @@ app.controller('produtoController', function($scope, $location, produtoService, 
 
 	//este metodo é chamado pelo 'index'
 	$scope.edit = function(prodObj){
-		console.log('editing... /produtos/edit/'+prodObj.id);
+		//console.log('editing... /produtos/edit/'+prodObj.id);
 		produtoService.resource.get({id: prodObj.id},function(produto){
 			produtoService.produto = produto;
-			console.log("Produto: "+produto.nome+ "__"+produto._id);
+			//console.log("Produto: "+produto.nome+ "__"+produto._id);
 			$location.path('/produtos/edit/'+produto._id);
 		});
 	};
 
 	$scope.update = function(){
-		console.log("teste update");
-		console.log("updating...."+$scope.produto._id);
+		//console.log("teste update");
+		//console.log("updating...."+$scope.produto._id);
 		produtoService.resource.update({id:$scope.produto._id},$scope.produto,
 			function(){
 				produtoService.produto = { nome: '', obs: '', divisao: {nome:''} , marca: '', precos: [], imagens:[] };
@@ -500,7 +501,7 @@ app.controller('produtoController', function($scope, $location, produtoService, 
 /*
 	Precos
 */
-app.controller('precoController', function($scope, $routeParams, $location, precoService, produtoService, lojaService){
+app.controller('precoController', function($scope, $routeParams, $location, precoService, produtoService, lojaService, imagemService){
 	
 	$scope.produtoID = $routeParams.idProduto;
 
@@ -509,8 +510,14 @@ app.controller('precoController', function($scope, $routeParams, $location, prec
 
 										/* !!!!!! SEGURANÇA !!!!!!!! */
 	$scope.produto = produtoService.resource.get({id:$scope.produtoID},function(produto){
-		console.log("Chegou o produto: "+produto.precos);
+		//console.log("Chegou o produto: "+produto.precos);
 		$scope.precos = [];
+		if(produto.imagens[0]){
+			$scope.imagem = produto.imagens[0];
+			//imagemService.resource.get({_id:produto.imagens[0]},function(imagem){
+		//		$scope.imagem = imagem;
+	//		});
+		}
 		for(i=0; i < produto.precos.length; i++){
 			precoService.resource.get({id:produto.precos[i]._id}, function(preco){
 				$scope.precos.push(preco);
@@ -522,12 +529,12 @@ app.controller('precoController', function($scope, $routeParams, $location, prec
 
 	$scope.preco = precoService.preco;
 
-	console.log("Url do produto: "+$routeParams.idProduto);
+	//console.log("Url do produto: "+$routeParams.idProduto);
 
 	$scope.post = function(){
 		console.log("a fazer um post de preco " + $scope.preco);
 		precoService.resource.save($scope.preco, function(preco){ //alterei novaDivisao
-			console.log("registei: "+preco._id);
+			//console.log("registei: "+preco._id);
 			$scope.produto.precos.push(preco._id);
 			produtoService.resource.update({id:$scope.produtoID},$scope.produto,
 				function(){
@@ -544,17 +551,17 @@ app.controller('precoController', function($scope, $routeParams, $location, prec
 
 	//este metodo é chamado pelo 'index'
 	$scope.edit = function(precodObj){
-		console.log('editing... /precos/edit/'+precodObj.id);
+		//console.log('editing... /precos/edit/'+precodObj.id);
 		precoService.resource.get({id: precodObj.id},function(preco){
 			precoService.preco = preco;
-			console.log("Preco: "+preco.nome+ "__"+preco._id);
+			//console.log("Preco: "+preco.nome+ "__"+preco._id);
 			$location.path('/precos/'+$scope.produtoID+'/edit/'+preco._id);					// fix me
 		});
 	};
 
 	$scope.update = function(){
-		console.log("teste update");
-		console.log("updating...."+$scope.preco._id);
+		//console.log("teste update");
+		//console.log("updating...."+$scope.preco._id);
 		precoService.resource.update({id:$scope.preco._id},$scope.preco,
 			function(){
 				precoService.preco = { valor: 0,  eCampanha: false, loja: {nome:'', local:''} };
@@ -575,7 +582,7 @@ app.controller('imagemController', function($scope, $routeParams, $location, ima
 
 	var loadProductWithImages = function(){
 		return produtoService.resource.get({id:$scope.produtoID},function(produto){
-			console.log("Chegou o produto com as imagens: "+produto.imagens);
+			//console.log("Chegou o produto com as imagens: "+produto.imagens);
 			$scope.imagens = [];
 			for(var i=0; i < produto.imagens.length; i++){
 				imagemService.resource.get({id: produto.imagens[i]._id}, function(imagem){
@@ -591,7 +598,7 @@ app.controller('imagemController', function($scope, $routeParams, $location, ima
 
 	$scope.post = function(element){
 		$scope.imagem = element.files[0];
-		console.log("a fazer um post de imagem " + $scope.imagem);
+		//console.log("a fazer um post de imagem " + $scope.imagem);
 		var reader = new FileReader();
 
 		reader.onload = function(event){//		console.log("Resultado:::: " + event.target.result);
@@ -602,12 +609,12 @@ app.controller('imagemController', function($scope, $routeParams, $location, ima
 				$scope.produto.imagens.push(imagem._id);
 				produtoService.resource.update({id:$scope.produtoID},$scope.produto,
 					function(){
-						console.log("Eu deveria estar a redirecionar");
+						//console.log("Eu deveria estar a redirecionar");
 						$scope.produto = loadProductWithImages();
 						$location.path('/imagens/'+$scope.produtoID);
 					},function(err){
-						console.log("Erro uploading images");
-						console.log(err);
+						//console.log("Erro uploading images");
+						//console.log(err);
 					});
 				});
 		};
@@ -634,10 +641,10 @@ app.controller('camaController', function($scope, $location, camaService, divisa
 	$scope.divisoes = divisaoService.resource.query();
 
 
-	console.log($scope.camas);
+	//console.log($scope.camas);
 
 	$scope.post = function(){
-		console.log("a fazer um post de uma cama " + $scope.produto);
+		//console.log("a fazer um post de uma cama " + $scope.produto);
 		$scope.produto.kind = "Cama";
 		camaService.resource.save($scope.produto, function(){ //alterei novaDivisao
 			$location.path('/camas');
@@ -652,17 +659,17 @@ app.controller('camaController', function($scope, $location, camaService, divisa
 
 	//este metodo é chamado pelo 'index'
 	$scope.edit = function(camaObj){
-		console.log('editing... /camas/edit/'+camaObj.id);
+		//console.log('editing... /camas/edit/'+camaObj.id);
 		camaService.resource.get({id: camaObj.id},function(cama){
 			camaService.produto = cama;
-			console.log("Cama: "+cama.nome+ "__"+cama._id);
+			//console.log("Cama: "+cama.nome+ "__"+cama._id);
 			$location.path('/camas/edit/'+cama._id);
 		});
 	};
 
 	$scope.update = function(){
-		console.log("teste update");
-		console.log("updating...."+$scope.produto._id);
+		//console.log("teste update");
+		//console.log("updating...."+$scope.produto._id);
 		camaService.resource.update({id:$scope.produto._id},$scope.produto,
 			function(){
 				$location.path('/camas');
@@ -683,7 +690,7 @@ app.controller('aspiradorController', function($scope, $location, aspiradorServi
 	$scope.divisoes = divisaoService.resource.query();
 
 
-	console.log($scope.aspiradores);
+	//console.log($scope.aspiradores);
 
 	$scope.post = function(){
 		console.log("a fazer um post de uma aspirador " + $scope.produto);
@@ -701,17 +708,17 @@ app.controller('aspiradorController', function($scope, $location, aspiradorServi
 
 	//este metodo é chamado pelo 'index'
 	$scope.edit = function(aspiradorObj){
-		console.log('editing... /aspiradores/edit/'+aspiradorObj.id);
+		//console.log('editing... /aspiradores/edit/'+aspiradorObj.id);
 		aspiradorService.resource.get({id: aspiradorObj.id},function(aspirador){
 			aspiradorService.produto = aspirador;
-			console.log("Aspirador: "+aspirador.nome+ "__"+aspirador._id);
+			//console.log("Aspirador: "+aspirador.nome+ "__"+aspirador._id);
 			$location.path('/aspiradores/edit/'+aspirador._id);
 		});
 	};
 
 	$scope.update = function(){
-		console.log("teste update");
-		console.log("updating...."+$scope.produto._id);
+		//console.log("teste update");
+		//console.log("updating...."+$scope.produto._id);
 		aspiradorService.resource.update({id:$scope.produto._id},$scope.produto,
 			function(){
 				$location.path('/aspiradores');
@@ -733,7 +740,7 @@ app.controller('colchaoController', function($scope, $location, colchaoService, 
 
 
 	$scope.post = function(){
-		console.log("a fazer um post de uma colchao " + $scope.produto);
+		//console.log("a fazer um post de uma colchao " + $scope.produto);
 		$scope.produto.kind = "Colchao";
 		colchaoService.resource.save($scope.produto, function(){ //alterei novaDivisao
 			$location.path('/colchoes');
@@ -748,17 +755,17 @@ app.controller('colchaoController', function($scope, $location, colchaoService, 
 
 	//este metodo é chamado pelo 'index'
 	$scope.edit = function(colchaoObj){
-		console.log('editing... /colchoes/edit/'+colchaoObj.id);
+		//console.log('editing... /colchoes/edit/'+colchaoObj.id);
 		colchaoService.resource.get({id: colchaoObj.id},function(colchao){
 			colchaoService.produto = colchao;
-			console.log("Colchao: "+colchao.nome+ "__"+colchao._id);
+			//console.log("Colchao: "+colchao.nome+ "__"+colchao._id);
 			$location.path('/colchoes/edit/'+colchao._id);
 		});
 	};
 
 	$scope.update = function(){
-		console.log("teste update");
-		console.log("updating...."+$scope.produto._id);
+		//console.log("teste update");
+		//console.log("updating...."+$scope.produto._id);
 		colchaoService.resource.update({id:$scope.produto._id},$scope.produto,
 			function(){
 				$location.path('/colchoes');
@@ -780,7 +787,7 @@ app.controller('figorificoController', function($scope, $location, figorificoSer
 	$scope.divisoes = divisaoService.resource.query();
 
 	$scope.post = function(){
-		console.log("a fazer um post de uma figorifico " + $scope.produto);
+		//console.log("a fazer um post de uma figorifico " + $scope.produto);
 		$scope.produto.kind = "Figorifico";
 		figorificoService.resource.save($scope.produto, function(){ //alterei novaDivisao
 			$location.path('/figorificos');
@@ -795,17 +802,17 @@ app.controller('figorificoController', function($scope, $location, figorificoSer
 
 	//este metodo é chamado pelo 'index'
 	$scope.edit = function(figorificoObj){
-		console.log('editing... /figorificos/edit/'+figorificoObj.id);
+		//console.log('editing... /figorificos/edit/'+figorificoObj.id);
 		figorificoService.resource.get({id: figorificoObj.id},function(figorifico){
 			figorificoService.produto = figorifico;
-			console.log("Figorifico: "+figorifico.nome+ "__"+figorifico._id);
+			//console.log("Figorifico: "+figorifico.nome+ "__"+figorifico._id);
 			$location.path('/figorificos/edit/'+figorifico._id);
 		});
 	};
 
 	$scope.update = function(){
-		console.log("teste update");
-		console.log("updating...."+$scope.produto._id);
+		//console.log("teste update");
+		//console.log("updating...."+$scope.produto._id);
 		figorificoService.resource.update({id:$scope.produto._id}, $scope.produto,
 			function(){
 				$location.path('/figorificos');
@@ -826,7 +833,7 @@ app.controller('maqLavarRoupaController', function($scope, $location, maqLavarRo
 	$scope.divisoes = divisaoService.resource.query();
 
 	$scope.post = function(){
-		console.log("a fazer um post de uma maqLavarRoupa " + $scope.produto);
+		//console.log("a fazer um post de uma maqLavarRoupa " + $scope.produto);
 		$scope.produto.kind = "MaqLavarRoupa";
 		maqLavarRoupaService.resource.save($scope.produto, function(){ //alterei novaDivisao
 			$location.path('/maqslavarroupa');
@@ -841,17 +848,17 @@ app.controller('maqLavarRoupaController', function($scope, $location, maqLavarRo
 
 	//este metodo é chamado pelo 'index'
 	$scope.edit = function(maqRoupaObj){
-		console.log('editing... /maqslavarroupa/edit/'+maqRoupaObj.id);
+		//console.log('editing... /maqslavarroupa/edit/'+maqRoupaObj.id);
 		maqLavarRoupaService.resource.get({id: maqRoupaObj.id},function(maqLavarRoupa){
 			maqLavarRoupaService.produto = maqLavarRoupa;
-			console.log("Figorifico: "+maqLavarRoupa.nome+ "__"+maqLavarRoupa._id);
+			//console.log("Figorifico: "+maqLavarRoupa.nome+ "__"+maqLavarRoupa._id);
 			$location.path('/maqslavarroupa/edit/'+maqLavarRoupa._id);
 		});
 	};
 
 	$scope.update = function(){
-		console.log("teste update");
-		console.log("updating...."+$scope.produto._id);
+		//console.log("teste update");
+		//console.log("updating...."+$scope.produto._id);
 		maqLavarRoupaService.resource.update({id:$scope.produto._id}, $scope.produto,
 			function(){
 				$location.path('#/maqslavarroupa');
