@@ -381,7 +381,7 @@ app.controller('lojaController', function($scope, $location, lojaService){
 
 
 	$scope.post = function(){
-		console.log("a fazer um post de loja " + $scope.loja.nome);
+		//console.log("a fazer um post de loja " + $scope.loja.nome);
 		lojaService.resource.save($scope.loja, function(){ //alterei novaDivisao
 			$location.path('/lojas');
 		});
@@ -395,17 +395,17 @@ app.controller('lojaController', function($scope, $location, lojaService){
 
 	//este metodo é chamado pelo 'index'
 	$scope.edit = function(lojaObj){
-		console.log('editing... /lojas/edit/'+lojaObj.id);
+		//console.log('editing... /lojas/edit/'+lojaObj.id);
 		lojaService.resource.get({id: lojaObj.id},function(loja){
 			lojaService.loja = loja;
-			console.log("Divisao: "+loja.nome+ "__"+loja._id);
+			//console.log("Divisao: "+loja.nome+ "__"+loja._id);
 			$location.path('/lojas/edit/'+loja._id);
 		});
 	};
 
 	$scope.update = function(){
-		console.log("teste update");
-		console.log("updating...."+$scope.loja._id);
+		//console.log("teste update");
+		//console.log("updating...."+$scope.loja._id);
 		lojaService.resource.update({id:$scope.loja._id},$scope.loja,
 			function(){
 				lojaService.loja = {nome: '', local: ''};
@@ -424,7 +424,7 @@ app.controller('produtoController', function($scope, $location, produtoService, 
 
 	$scope.produtos = produtoService.resource.query();
 
-	$scope.filter = {divisao:'ALL'};
+	$scope.filter = {divisao:'ALL', nome:''};;
 
 	$scope.produto = produtoService.produto;
 	$scope.divisoes = divisaoService.resource.query();

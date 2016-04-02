@@ -8,6 +8,10 @@
 	<option ng-repeat = "divisao in divisoes" value = "{{divisao.nome}}">{{divisao.nome}}</option>
 </select>
 </p>
+<p>
+<label for="divisao">Procurar por nome</label>
+	<input type="text" class="form-control" placeholder="Nome do produto" ng-model="filter.nome"/>
+</p>
 
 	<table class="table">
 		<tr>
@@ -19,7 +23,7 @@
 			<th>Preço</th>
 			<th>Operações</th>
 		</tr>
-		<tr ng-repeat = "produto in produtos" ng-class-odd="'odd'" ng-class-even="'even'" ng-show="filter.divisao == 'ALL' || produto.divisao.nome == filter.divisao">
+		<tr ng-repeat = "produto in produtos" ng-class-odd="'odd'" ng-class-even="'even'" ng-show="(filter.divisao == 'ALL' || produto.divisao.nome == filter.divisao) && (produto.nome.toLowerCase().indexOf(filter.nome.toLowerCase()) > -1)">
 		<!-- How to make this a template ??? -->
 		<td ng-show="produto.imagens[0]"><img src={{getImagem(produto.imagens[0]).data}} width="100" height="100" /></td>
 		<!--<td ng-show="produto.imagens.length > 0"><img src={{produto.imagens[0].data}} width="100" height="100" /></td>-->
