@@ -39,8 +39,8 @@ var _DETAIL = "";
 app.config(function($routeProvider){
 	$routeProvider
 		.when('/', {
-			templateUrl: 'main.html',
-			controller: 'appController'
+			templateUrl : 'Produto/produtos.html',
+			controller : 'produtoController'
 		})
 
 		.when('/divisoes',{
@@ -91,6 +91,16 @@ app.config(function($routeProvider){
 		.when('/produtos/edit/:id',{
 			templateUrl : 'Produto/editarProduto.html',
 			controller : 'produtoController'
+		})
+
+		.when('/produtos/bought/:id',{
+			templateUrl: 'Produto/comprados.html',
+			controller: 'produtoController'
+		})
+
+		.when('/produtos/details/:id',{
+			templateUrl: 'Produto/detalhes.html',
+			controller: 'produtoController'
 		})
 
 		.when('/precos/:idProduto',{
@@ -483,6 +493,24 @@ app.controller('produtoController', function($scope, $location, produtoService, 
 			produtoService.produto = produto;
 			//console.log("Produto: "+produto.nome+ "__"+produto._id);
 			$location.path('/produtos/edit/'+produto._id);
+		});
+	};
+
+	$scope.bought = function(prodObj){
+		//console.log('editing... /produtos/edit/'+prodObj.id);
+		produtoService.resource.get({id: prodObj.id},function(produto){
+			produtoService.produto = produto;
+			//console.log("Produto: "+produto.nome+ "__"+produto._id);
+			$location.path('/produtos/bought/'+produto._id);
+		});
+	};
+
+	$scope.details = function(prodObj){
+		//console.log('editing... /produtos/edit/'+prodObj.id);
+		produtoService.resource.get({id: prodObj.id},function(produto){
+			produtoService.produto = produto;
+			//console.log("Produto: "+produto.nome+ "__"+produto._id);
+			$location.path('/produtos/details/'+produto._id);
 		});
 	};
 

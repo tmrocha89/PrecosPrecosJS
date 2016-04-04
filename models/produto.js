@@ -37,7 +37,12 @@ var produtoSchema = mongoose.Schema({
     imagens: [{
     	type : mongoose.Schema.Types.ObjectId,
     	ref: 'Imagem'
-    }]
+    }],
+    adquirido: Boolean,
+    precoAdquirido: {
+    	type: mongoose.Schema.Types.ObjectId,
+    	ref: 'Preco'
+    }
 }, options); //{collection : 'produtos', discriminatorKey : 'kind'});
 
 /*

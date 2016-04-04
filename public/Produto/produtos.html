@@ -35,6 +35,8 @@
 			<td>€ {{getPrecoText(produto.precos)}}</td>
 			<td><a href="#/precos/{{produto._id}}">Preços</a> |
 				<a href="#/imagens/{{produto._id}}">Imagens</a> |
+				<a href="#" ng-click="details({id:produto._id})">Detalhes</a> |
+				<a href="#" ng-click="bought({id:produto._id})">Adquirido</a> |
 				<a href="#" ng-click="edit({id:produto._id})">Editar</a> |
 			    <a href="#" ng-click="delete({id:produto._id})">Eliminar</a>
 			</td>
