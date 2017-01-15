@@ -1,0 +1,21 @@
+web:
+    hostname: webapp-precosjs
+    build: .
+    container_name: "webapp-js"
+    command: "node ./bin/www"
+    ports:
+        - "3100:3000"
+    links:
+        - mongodb:mongo
+    environment: 
+        MONGO_DB_CONNECT_STR: "mongodb://mongo/precosjs"
+    restart: always
+
+mongodb:
+    hostname: mongo
+    image:  mongo:3.2.9
+    container_name: "mongodb-app"
+    ports:
+        - 27117:27017
+    command: "--smallfiles --logpath=/dev/null"
+    restart: always
