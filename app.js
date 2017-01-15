@@ -25,7 +25,7 @@ var produtos = require('./routes/produtoApi');
 require('./models/user');
 var authenticate = require('./routes/authenticate')(passport);
 
-mongoose.connect("mongodb://localhost/precosjs");
+mongoose.connect(process.env.MONGO_DB_CONNECT_STR);
 
 var app = express();
 
